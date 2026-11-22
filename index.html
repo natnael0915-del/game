@@ -1,0 +1,1082 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0820">
+<title>Bingo Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0820;--bg2:#120e30;--card:#171240;--card2:#1e1850;--ink:#f1eeff;--muted:#a199d6;--line:#2c2566;
+--brand:#ff3d81;--brand2:#7c4dff;--gold:#ffc83d;--cyan:#27d9ff;--ok:#2ed573;--bad:#ff5470;--warn:#ffb020;
+--grad:linear-gradient(135deg,var(--brand),var(--brand2));--gold-grad:linear-gradient(135deg,#ffd75e,#ff9f1c);
+--radius:16px;--shadow:0 12px 30px rgba(0,0,0,.42);--display:'Rajdhani',system-ui,sans-serif;
+--cB:#2f7bff;--cI:#ff4757;--cN:#e9e9f5;--cG:#2ed573;--cO:#ffa502}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(900px 500px at 90% -10%,rgba(124,77,255,.28),transparent 60%),radial-gradient(800px 500px at -10% 10%,rgba(255,61,129,.20),transparent 55%),var(--bg);min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{margin:0 0 .5rem;font-family:var(--display);letter-spacing:.03em;line-height:1.1}
+h1{font-size:2rem;text-transform:uppercase}h2{font-size:1.4rem;text-transform:uppercase}h3{font-size:1.05rem;color:var(--muted)}
+a{color:var(--cyan)}
+.muted{color:var(--muted)}.small{font-size:.85rem}.right{text-align:right}.nowrap{white-space:nowrap}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row.sb{justify-content:space-between}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}.g4{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(11,8,32,.88);backdrop-filter:blur(10px);border-bottom:2px solid transparent;border-image:var(--grad) 1}
+.brand{font:700 1.45rem var(--display);letter-spacing:.07em;text-transform:uppercase;background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.top .sp{flex:1}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--card2);border:1px solid var(--line);font-weight:700;white-space:nowrap}
+.chip.gold{background:var(--gold-grad);color:#2b1a00;border-color:transparent}
+.icon-btn{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--card2);cursor:pointer;font-size:1.15rem;display:grid;place-items:center}
+.badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:9px;background:var(--brand);color:#fff;font-size:.7rem;font-weight:800;display:grid;place-items:center;padding:0 4px}
+.nav{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--line);scrollbar-width:none}
+.nav button{flex:none;background:transparent;border:1px solid transparent;padding:8px 16px;border-radius:999px;cursor:pointer;color:var(--muted);font:700 .98rem var(--display);letter-spacing:.06em;text-transform:uppercase;position:relative}
+.nav button.on{background:var(--grad);color:#fff;box-shadow:0 6px 18px rgba(124,77,255,.4)}
+main{max-width:1100px;margin:0 auto;padding:18px 14px 90px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:16px;box-shadow:var(--shadow)}
+.kpi{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
+.kpi:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--grad)}
+.kpi .ic{position:absolute;right:12px;top:8px;font-size:1.6rem}.kpi .l{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;font-weight:700}
+.kpi .v{font:700 1.9rem var(--display)}.kpi .s{font-size:.8rem;color:var(--muted)}
+label{display:block;font-size:.76rem;color:var(--muted);margin:11px 0 4px;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+input,select,textarea{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:12px;background:var(--bg2);color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--cyan);outline-offset:1px}
+input[type=checkbox],input[type=radio]{width:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 18px;border-radius:12px;border:1px solid var(--line);background:var(--card2);cursor:pointer;font-weight:700;min-height:46px;transition:transform .08s}
+.btn:hover{transform:translateY(-1px)}.btn:active{transform:translateY(1px)}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn.primary{background:var(--grad);color:#fff;border-color:transparent;box-shadow:0 8px 22px rgba(255,61,129,.32);font-family:var(--display);font-size:1.08rem;letter-spacing:.06em;text-transform:uppercase}
+.btn.gold{background:var(--gold-grad);color:#2b1a00;border-color:transparent;font-family:var(--display);font-size:1.15rem;letter-spacing:.06em;text-transform:uppercase}
+.btn.danger{background:rgba(255,84,112,.16);color:var(--bad);border-color:transparent}
+.btn.sm{padding:5px 11px;min-height:32px;font-size:.84rem;border-radius:10px}.btn.block{width:100%}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;background:rgba(124,77,255,.2);color:#b7a3ff}
+.pill.good{background:rgba(46,213,115,.18);color:var(--ok)}.pill.bad{background:rgba(255,84,112,.18);color:var(--bad)}.pill.warn{background:rgba(255,176,32,.18);color:var(--warn)}.pill.gray{background:var(--line);color:var(--muted)}.pill.live{background:var(--bad);color:#fff;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.55}}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tbody tr:hover{background:rgba(124,77,255,.08)}
+.pos{color:var(--ok)}.neg{color:var(--bad)}
+.room{display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.room:before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--grad)}
+.room.active:before{background:linear-gradient(90deg,var(--bad),var(--warn))}
+.room .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.room .stats div{background:var(--bg2);border-radius:12px;padding:8px 4px}.room .stats b{display:block;font:700 1.25rem var(--display)}.room .stats span{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.empty{text-align:center;color:var(--muted);padding:28px}
+.modal-bg{position:fixed;inset:0;background:rgba(5,3,18,.78);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:14px;z-index:40}
+.modal{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;width:100%;max-width:460px;max-height:92vh;overflow:auto;box-shadow:var(--shadow)}.modal.wide{max-width:720px}
+.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:12px;z-index:60;max-width:90vw;font-weight:700;box-shadow:var(--shadow)}.toast.err{background:var(--bad);color:#fff}.toast.ok{background:var(--ok);color:#06240f}
+.err-box{background:rgba(255,84,112,.16);color:var(--bad);padding:10px 12px;border-radius:12px;margin-bottom:10px}
+.info-box{background:rgba(39,217,255,.12);color:var(--cyan);padding:10px 12px;border-radius:12px;margin-bottom:12px}
+.warn-box{background:rgba(255,176,32,.15);color:var(--warn);padding:10px 12px;border-radius:12px;margin-bottom:12px;font-weight:600}
+.spinner{width:30px;height:30px;border:4px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite;margin:18px auto}@keyframes spin{to{transform:rotate(360deg)}}
+.login{max-width:410px;margin:6vh auto;padding:0 16px}.hero{text-align:center;margin-bottom:18px}.hero .big{font:700 3rem var(--display);letter-spacing:.09em;text-transform:uppercase;background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}.hero .balls{font-size:2.2rem;letter-spacing:6px}
+.seg{display:flex;gap:6px;background:var(--bg2);padding:4px;border-radius:12px}.seg button{flex:1;border:0;background:transparent;padding:9px;border-radius:9px;cursor:pointer;font-weight:700;color:var(--muted)}.seg button.on{background:var(--grad);color:#fff}
+/* ---------- bingo ---------- */
+.stage{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.stage{grid-template-columns:1fr}}
+.ball{--bc:var(--cB);width:132px;height:132px;border-radius:50%;margin:6px auto;display:grid;place-items:center;text-align:center;color:#fff;background:radial-gradient(circle at 32% 28%,#ffffffcc 0 9%,var(--bc) 10% 62%,#00000055 100%);box-shadow:0 14px 34px #0009,inset 0 -10px 24px #0006}
+.ball b{display:block;font:700 3.2rem/0.9 var(--display);text-shadow:0 3px 8px #0008}.ball span{display:block;font:700 1.1rem var(--display);letter-spacing:.15em}
+.ball.N{color:#1a1a2e;text-shadow:none}.ball.pop{animation:pop .7s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{0%{transform:scale(.2) rotate(-90deg);opacity:0}100%{transform:none;opacity:1}}
+.recent{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.mini{--bc:var(--cB);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 32% 28%,#ffffffaa 0 8%,var(--bc) 9% 100%);font:700 1.05rem var(--display);color:#fff}.mini.N{color:#1a1a2e}
+.board{display:grid;grid-template-columns:22px repeat(15,1fr);gap:3px;font:700 .72rem var(--display)}
+.board i{font-style:normal;display:grid;place-items:center;height:22px;border-radius:5px;background:var(--bg2);color:#5e57a0}.board i.d{background:var(--bc);color:#fff}.board i.N.d{color:#1a1a2e}.board i.h{color:#fff;background:none;font-size:.9rem}
+.cartela{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;max-width:420px;margin:0 auto}
+.cartela .hd{height:44px;border-radius:12px;display:grid;place-items:center;font:700 1.7rem var(--display);color:#fff;background:var(--bc)}.cartela .hd.N{color:#1a1a2e}
+.cell{position:relative;aspect-ratio:1;border-radius:14px;display:grid;place-items:center;background:var(--card2);border:2px solid var(--line);font:700 clamp(1.3rem,6vw,2rem) var(--display);user-select:none;overflow:hidden}
+.cell.mk{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 6px 16px rgba(124,77,255,.5)}
+.cell.mk:after{content:"";position:absolute;inset:14%;border-radius:50%;border:3px solid rgba(255,255,255,.55)}
+.cell.new{animation:pop .6s cubic-bezier(.2,1.6,.4,1)}
+.cell.free{background:var(--gold-grad);color:#2b1a00;border-color:transparent;font-size:clamp(.85rem,3.4vw,1.15rem);letter-spacing:.05em}
+.cell.win{box-shadow:0 0 0 3px var(--gold),0 0 22px var(--gold)}
+.mini-cartela{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;width:150px}.mini-cartela i{font-style:normal;aspect-ratio:1;border-radius:5px;background:var(--bg2);display:grid;place-items:center;font:700 .72rem var(--display);color:var(--muted)}.mini-cartela i.mk{background:var(--brand2);color:#fff}.mini-cartela i.fr{background:var(--gold);color:#2b1a00}
+.bar{height:12px;background:var(--line);border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:var(--grad)}
+.winner{text-align:center;padding:18px;border-radius:var(--radius);background:linear-gradient(135deg,rgba(255,200,61,.22),rgba(255,61,129,.18));border:1px solid var(--gold);margin-bottom:14px}.winner .t{font:700 2rem var(--display);color:var(--gold);text-transform:uppercase}
+.bingo-btn{width:100%;margin-top:14px;min-height:64px;font-size:1.6rem}
+.bingo-btn.ready{animation:glow 1s ease-in-out infinite}@keyframes glow{50%{box-shadow:0 0 30px 6px rgba(255,200,61,.7)}}
+.tabsbar{position:fixed;bottom:0;left:0;right:0;z-index:12;display:none;background:rgba(18,14,48,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+.tabsbar button{flex:1;background:none;border:0;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.66rem;font-weight:700;cursor:pointer;padding:4px 0}.tabsbar button span{font-size:1.3rem}.tabsbar button.on{color:var(--gold)}
+@media (max-width:760px){.tabsbar{display:flex}.nav.playernav{display:none}.top .who{display:none}.toast{bottom:90px}}
+.evidence{max-width:100%;border-radius:12px;display:block;margin:8px auto}
+.statusline{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+</style>
+</head>
+<body>
+<div id="app"><div class="spinner"></div></div>
+<script type="module">
+/* =====================================================================
+   BINGO ARENA - one-file Firebase app (GitHub Pages friendly, free plan)
+   1) Paste your Firebase web config below (Firebase console > Project settings > Your apps).
+   2) Publish the rules (shown in the setup guide, also in firestore.rules).
+   ===================================================================== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDIr8reLFd3wN-39UaSpPdTHqUTZXQ2WsI",
+  authDomain: "game-9e1d9.firebaseapp.com",
+  projectId: "game-9e1d9",
+  storageBucket: "game-9e1d9.firebasestorage.app",
+  messagingSenderId: "860988567374",
+  appId: "1:860988567374:web:62a66983a34ba11a0e781f"
+};
+const RULES = `rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- helpers ----------
+    function authed() { return request.auth != null; }
+    function userDoc() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
+    function active() {
+      return authed()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && userDoc().status == 'active';
+    }
+    function isAdmin() { return active() && userDoc().role == 'admin'; }
+    function mine(data) { return data.userId == request.auth.uid; }
+    function onlyChanges(keys) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys); }
+
+    // ---------- users ----------
+    match /users/{u} {
+      allow read: if authed() && (request.auth.uid == u || isAdmin());
+      // players self-register as 'player'. The very first admin can only be created while settings/main does not exist yet.
+      allow create: if authed() && request.auth.uid == u && (
+          (request.resource.data.role == 'player' && request.resource.data.status == 'active')
+          || (request.resource.data.role == 'admin' && request.resource.data.status == 'active'
+              && !exists(/databases/$(database)/documents/settings/main)));
+      allow update: if isAdmin() || (authed() && request.auth.uid == u && onlyChanges(['lastLoginAt']));
+    }
+
+    match /settings/{d} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ---------- wallets: only the host/admin can change a balance ----------
+    match /wallets/{u} {
+      allow read: if authed() && (request.auth.uid == u || isAdmin());
+      allow create: if isAdmin() || (authed() && request.auth.uid == u
+          && request.resource.data.balance == 0 && request.resource.data.totalDeposited == 0
+          && request.resource.data.totalSpent == 0 && request.resource.data.totalWon == 0);
+      allow update: if isAdmin();
+    }
+
+    // ---------- immutable ledger ----------
+    match /transactions/{t} {
+      allow read: if isAdmin() || (active() && mine(resource.data));
+      allow create: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // ---------- deposits ----------
+    match /depositRequests/{r} {
+      allow read: if isAdmin() || (active() && mine(resource.data));
+      allow create: if active() && mine(request.resource.data)
+          && request.resource.data.status == 'pending'
+          && request.resource.data.amount is number
+          && request.resource.data.amount > 0 && request.resource.data.amount <= 1000000
+          && request.resource.data.createdAt == request.time;
+      allow update: if isAdmin();
+    }
+    match /depositEvidence/{r} {
+      allow read: if isAdmin() || (active() && mine(resource.data));
+      allow create: if active() && mine(request.resource.data)
+          && request.resource.data.img is string && request.resource.data.img.size() < 800000
+          && request.resource.data.img.matches('^data:image/jpeg;base64,.*');
+      allow delete: if isAdmin();
+    }
+
+    // ---------- withdrawal simulation (only when the admin switched it on) ----------
+    match /withdrawalRequests/{r} {
+      allow read: if isAdmin() || (active() && mine(resource.data));
+      allow create: if active() && mine(request.resource.data)
+          && get(/databases/$(database)/documents/settings/main).data.withdrawalsEnabled == true
+          && request.resource.data.status == 'pending'
+          && request.resource.data.amount is number && request.resource.data.amount > 0
+          && request.resource.data.createdAt == request.time;
+      allow update: if isAdmin();
+    }
+
+    // ---------- notifications ----------
+    match /notifications/{n} {
+      allow read: if isAdmin() || (authed() && mine(resource.data));
+      allow create: if isAdmin();
+      allow update: if isAdmin() || (authed() && mine(resource.data) && onlyChanges(['read']));
+    }
+
+    // ---------- bingo ----------
+    match /bingoRooms/{room} {
+      allow read: if active();
+      allow write: if isAdmin();
+      match /players/{p}   { allow read: if active(); allow write: if isAdmin(); }
+      match /cartelas/{c}  { allow read: if isAdmin() || (active() && mine(resource.data)); allow write: if isAdmin(); }
+    }
+    match /bingoGames/{g} {
+      allow read: if active();
+      allow write: if isAdmin();
+      match /draws/{d} { allow read: if active(); allow write: if isAdmin(); }
+    }
+    // the secret draw order is never readable by players
+    match /bingoSecrets/{g} { allow read, write: if isAdmin(); }
+
+    // join / leave requests are processed by the host (admin) engine
+    match /roomRequests/{r} {
+      allow read: if isAdmin() || (active() && mine(resource.data));
+      allow create: if active() && mine(request.resource.data)
+          && request.resource.data.status == 'pending'
+          && request.resource.data.type in ['join', 'leave']
+          && request.resource.data.createdAt == request.time;
+      allow update: if isAdmin();
+    }
+    // bingo claims (validated by the host, never trusted from the browser)
+    match /claims/{c} {
+      allow read: if isAdmin() || (active() && mine(resource.data));
+      allow create: if active() && mine(request.resource.data)
+          && c == request.resource.data.roomId + '_' + request.auth.uid
+          && request.resource.data.status == 'pending'
+          && request.resource.data.createdAt == request.time
+          && exists(/databases/$(database)/documents/bingoRooms/$(request.resource.data.roomId)/players/$(request.auth.uid))
+          && get(/databases/$(database)/documents/bingoGames/$(request.resource.data.roomId)).data.status == 'active';
+      // after a rejected claim a player may try again; anything else is host-only
+      allow update: if isAdmin() || (active() && mine(resource.data) && resource.data.status == 'rejected'
+          && request.resource.data.status == 'pending' && mine(request.resource.data)
+          && request.resource.data.roomId == resource.data.roomId
+          && request.resource.data.createdAt == request.time
+          && get(/databases/$(database)/documents/bingoGames/$(resource.data.roomId)).data.status == 'active');
+    }
+    // one row per player per room, used for "My Cartelas" and "Game History"
+    match /participations/{p} {
+      allow read: if isAdmin() || (active() && mine(resource.data));
+      allow write: if isAdmin();
+    }
+
+    // ---------- audit ----------
+    match /auditLogs/{a} {
+      allow read, create: if isAdmin();
+      allow update, delete: if false;
+    }
+  }
+}
+`;
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, updatePassword, reauthenticateWithCredential, EmailAuthProvider }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where, orderBy, limit, startAfter, onSnapshot, runTransaction, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const $app = document.getElementById('app');
+{ const rc = Element.prototype.replaceChildren; Element.prototype.replaceChildren = function (...k) { return rc.apply(this, k.filter((x) => x !== null && x !== undefined && x !== false)); }; }
+
+// ---------- tiny DOM helpers ----------
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v === null || v === undefined || v === false) continue;
+    if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2), v);
+    else if (k === 'class') el.className = v;
+    else if (k === 'value') el.value = v;
+    else if (k === 'checked' || k === 'disabled' || k === 'selected') el[k] = !!v;
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  const add = (c) => { if (Array.isArray(c)) return c.forEach(add); if (c === null || c === undefined || c === false) return; el.append(c.nodeType ? c : document.createTextNode(String(c))); };
+  kids.forEach(add);
+  return el;
+}
+const S = { user: null, wallet: null, settings: {}, route: { name: 'home' }, viewSubs: [], globalSubs: [], booting: false, notifs: [], pendingDeposits: 0, host: null };
+const pad = (n) => String(n).padStart(2, '0');
+const fmt = (n) => Number(n || 0).toLocaleString(undefined, { maximumFractionDigits: 2 });
+const coins = (n) => `🪙 ${fmt(n)}`;
+const r2 = (n) => Math.round((n + Number.EPSILON) * 100) / 100;
+const num = (v) => (v === '' || v === null || v === undefined ? NaN : Number(v));
+const clean = (v, max = 100) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
+const tsMs = (x) => (x && typeof x.toMillis === 'function' ? x.toMillis() : typeof x === 'number' ? x : 0);
+const fmtDT = (x) => { const ms = tsMs(x); return ms ? new Date(ms).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—'; };
+const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const LETTERS = ['B', 'I', 'N', 'G', 'O'];
+const letterOf = (n) => LETTERS[Math.min(4, Math.floor((n - 1) / 15))];
+
+function toast(msg, kind) { const t = h('div', { class: 'toast ' + (kind || '') }, msg); document.body.append(t); setTimeout(() => t.remove(), kind === 'err' ? 5200 : 2600); }
+const friendly = (e) => {
+  const c = (e && e.code) || '';
+  if (/invalid-credential|wrong-password|user-not-found|invalid-email/.test(c)) return 'Wrong username or password';
+  if (c.includes('too-many-requests')) return 'Too many attempts. Wait a few minutes and try again.';
+  if (c.includes('email-already-in-use')) return 'That username is already taken';
+  if (c.includes('weak-password')) return 'Password must be at least 6 characters';
+  if (c.includes('permission-denied')) return 'Not allowed. (Rules not published yet, or your account is suspended.)';
+  if (c.includes('network') || c.includes('unavailable')) return 'No internet connection';
+  return (e && e.message) || String(e);
+};
+const fail = (e) => { console.error(e); toast(friendly(e), 'err'); };
+function modal(title, content, opts = {}) {
+  const close = () => bg.remove();
+  const bg = h('div', { class: 'modal-bg', onclick: (e) => { if (e.target === bg && !opts.sticky) close(); } }, h('div', { class: 'modal' + (opts.wide ? ' wide' : '') }, h('h2', {}, title), content));
+  document.body.append(bg); const f = bg.querySelector('input,select'); if (f && !opts.noFocus) f.focus(); return close;
+}
+const field = (label, input) => h('div', {}, h('label', {}, label), input);
+function select(options, value, attrs) { return h('select', attrs, options.map((o) => { const [v, t] = Array.isArray(o) ? o : [o, o]; return h('option', { value: v, selected: String(v) === String(value) }, t); })); }
+async function guarded(btn, fn) { if (btn.disabled) return; btn.disabled = true; try { await fn(); } catch (e) { fail(e); } finally { btn.disabled = false; } }
+function confirmBox(title, text, okLabel, onOk, danger) {
+  const ok = h('button', { class: 'btn ' + (danger ? 'danger' : 'primary'), onclick: () => guarded(ok, async () => { await onOk(); close(); }) }, okLabel);
+  const close = modal(title, h('div', {}, h('p', {}, text), h('div', { class: 'row', style: 'justify-content:flex-end' }, h('button', { class: 'btn', onclick: () => close() }, 'Cancel'), ok)));
+}
+function reasonBox(title, label, okLabel, onSubmit) {
+  const reason = h('input', { placeholder: label, maxlength: 200 });
+  const ok = h('button', { class: 'btn danger', onclick: () => guarded(ok, async () => { if (clean(reason.value, 200).length < 3) throw new Error('A reason is required'); await onSubmit(clean(reason.value, 200)); close(); }) }, okLabel);
+  const close = modal(title, h('div', {}, field('Reason', reason), h('div', { class: 'row', style: 'justify-content:flex-end;margin-top:12px' }, h('button', { class: 'btn', onclick: () => close() }, 'Cancel'), ok)));
+}
+const kpi = (label, value, sub, icon) => h('div', { class: 'kpi' }, icon ? h('div', { class: 'ic' }, icon) : null, h('div', { class: 'l' }, label), h('div', { class: 'v' }, value), sub ? h('div', { class: 's' }, sub) : null);
+const statusPill = (s) => h('span', { class: 'pill ' + ({ waiting: 'warn', active: 'live', paused: 'warn', completed: 'good', closed: 'gray', pending: 'warn', approved: 'good', rejected: 'bad', accepted: 'good', cancelled: 'gray' }[s] || '') }, s);
+const spinner = () => h('div', { class: 'spinner' });
+function downloadText(name, text, type) { const a = h('a', { href: URL.createObjectURL(new Blob([text], { type })), download: name }); document.body.append(a); a.click(); a.remove(); }
+
+// ---------- secure randomness + Bingo logic ----------
+function randInt(max) { const lim = Math.floor(0x100000000 / max) * max; const a = new Uint32Array(1); let x; do { crypto.getRandomValues(a); x = a[0]; } while (x >= lim); return x % max; }
+function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = randInt(i + 1); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+// 25 numbers, row-major. Column c holds 5 distinct numbers from (15c+1..15c+15), sorted top to bottom. Index 12 (centre) = 0 = FREE.
+function genCartela() {
+  const cols = []; for (let c = 0; c < 5; c++) { const pool = []; for (let i = 1; i <= 15; i++) pool.push(c * 15 + i); cols.push(shuffle(pool).slice(0, 5).sort((a, b) => a - b)); }
+  const nums = []; for (let r = 0; r < 5; r++) for (let c = 0; c < 5; c++) nums.push(cols[c][r]); nums[12] = 0; return nums;
+}
+const rng5 = [0, 1, 2, 3, 4];
+const LINES = { horizontal: rng5.map((r) => rng5.map((c) => r * 5 + c)), vertical: rng5.map((c) => rng5.map((r) => r * 5 + c)), diagonal: [[0, 6, 12, 18, 24], [4, 8, 12, 16, 20]] };
+const PATTERNS = { horizontal: 'Horizontal line', vertical: 'Vertical line', diagonal: 'Diagonal line', anyline: 'Any line (row, column or diagonal)', fullhouse: 'Full house (every number)' };
+const PATTERN_HELP = { horizontal: 'Complete any full ROW.', vertical: 'Complete any full COLUMN.', diagonal: 'Complete either DIAGONAL.', anyline: 'Complete any ROW, COLUMN or DIAGONAL.', fullhouse: 'Mark EVERY number on your cartela.' };
+function patternLines(p) { if (p === 'fullhouse') return [Array.from({ length: 25 }, (_, i) => i)]; if (p === 'anyline') return [...LINES.horizontal, ...LINES.vertical, ...LINES.diagonal]; return LINES[p] || []; }
+const isMarked = (n, set) => n === 0 || set.has(n);
+const completedLines = (nums, set, pattern) => patternLines(pattern).filter((l) => l.every((i) => isMarked(nums[i], set)));
+// how many draws were needed before this cartela completed the pattern (null = never)
+function firstComplete(nums, draws, pattern) { const set = new Set(); for (let k = 0; k < draws.length; k++) { set.add(draws[k]); if (completedLines(nums, set, pattern).length) return k + 1; } return null; }
+function bestProgress(nums, set, pattern) { const ls = patternLines(pattern); let best = 0; ls.forEach((l) => { best = Math.max(best, l.filter((i) => isMarked(nums[i], set)).length / l.length); }); return best; }
+
+// ---------- setup guide (until the config is filled in) ----------
+const configured = !String(FIREBASE_CONFIG.apiKey).startsWith('PASTE');
+if (!configured) {
+  const copy = h('button', { class: 'btn sm', onclick: () => navigator.clipboard.writeText(RULES).then(() => toast('Rules copied', 'ok')) }, 'Copy rules');
+  $app.replaceChildren(h('main', {}, h('div', { class: 'card' }, h('h1', {}, 'Bingo Arena: one-time setup'), h('p', { class: 'muted' }, 'This page needs your Firebase project details. Do these steps once:'),
+    h('ol', {},
+      h('li', {}, 'Go to ', h('b', {}, 'console.firebase.google.com'), ' → Add project. Use a NEW project (for example "bingo"), separate from your game-zone one, because security rules apply to a whole project.'),
+      h('li', {}, 'Build → ', h('b', {}, 'Authentication'), ' → Get started → enable ', h('b', {}, 'Email/Password'), '.'),
+      h('li', {}, 'Build → ', h('b', {}, 'Firestore Database'), ' → Create database → nearby region → ', h('b', {}, 'production mode'), '.'),
+      h('li', {}, 'Firestore → ', h('b', {}, 'Rules'), ' tab → delete everything → paste the rules below → ', h('b', {}, 'Publish'), '.'),
+      h('li', {}, 'Project settings (gear) → Your apps → ', h('b', {}, '</>'), ' Web → register → copy the ', h('code', {}, 'firebaseConfig'), ' values into ', h('code', {}, 'FIREBASE_CONFIG'), ' at the top of this file, then upload the file again.'),
+      h('li', {}, 'After putting it on GitHub Pages: Authentication → Settings → ', h('b', {}, 'Authorized domains'), ' → add ', h('code', {}, 'YOURNAME.github.io'), '.'),
+      h('li', {}, 'Open the page and press "Create the owner (admin) account" before anyone else visits.')),
+    h('div', { class: 'row sb' }, h('h3', {}, 'Firestore rules'), copy), h('pre', { style: 'max-height:320px;overflow:auto;background:var(--bg2);padding:12px;border-radius:12px;font-size:.78rem' }, RULES))));
+  throw new Error('Firebase not configured yet');
+}
+
+const app = initializeApp(FIREBASE_CONFIG);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ---------- data helpers ----------
+const C = (path) => collection(db, path);
+const P = (path) => doc(db, path);
+const newId = (path) => doc(C(path)).id;
+async function qlist(path, ...c) { const s = await getDocs(query(C(path), ...c)); return s.docs.map((d) => ({ id: d.id, ...d.data() })); }
+async function getData(path) { const s = await getDoc(P(path)); return s.exists() ? { id: s.id, ...s.data() } : null; }
+function sub(unsub) { S.viewSubs.push(unsub); return unsub; }
+function clearViewSubs() { S.viewSubs.forEach((u) => { try { u(); } catch { /* ignore */ } }); S.viewSubs = []; }
+function listen(ref, cb) { return onSnapshot(ref, cb, (e) => console.warn('listener error', e && e.code, e && e.message)); }
+async function audit(action, detail = '') { try { await addDoc(C('auditLogs'), { adminId: S.user.id, adminName: S.user.username, action, detail: String(detail).slice(0, 400), createdAt: serverTimestamp() }); } catch (e) { console.warn(e); } }
+const notifyDoc = (userId, title, message, type) => ({ userId, title, message, type: type || 'info', read: false, createdAt: serverTimestamp() });
+async function notify(userId, title, message, type) { try { await addDoc(C('notifications'), notifyDoc(userId, title, message, type)); } catch (e) { console.warn(e); } }
+
+// ---- wallet change inside a transaction (admin/host only; every change writes an immutable ledger row) ----
+async function txWallet(tx, uid) { const ref = P('wallets/' + uid); const s = await tx.get(ref); return { uid, ref, w: s.exists() ? s.data() : { balance: 0, totalDeposited: 0, totalSpent: 0, totalWon: 0 } }; }
+function txApply(tx, wr, delta, kind, meta) {
+  const w = wr.w; const before = Number(w.balance || 0); const after = r2(before + delta);
+  if (after < 0) throw new Error('Insufficient balance');
+  const next = { balance: after, totalDeposited: Number(w.totalDeposited || 0), totalSpent: Number(w.totalSpent || 0), totalWon: Number(w.totalWon || 0) };
+  if (kind === 'deposit') next.totalDeposited = r2(next.totalDeposited + delta);
+  if (kind === 'spent') next.totalSpent = r2(next.totalSpent - delta);
+  if (kind === 'won') next.totalWon = r2(next.totalWon + delta);
+  if (kind === 'refund') next.totalSpent = r2(Math.max(0, next.totalSpent - delta));
+  tx.set(wr.ref, { ...next, updatedAt: serverTimestamp() }); wr.w = next;
+  tx.set(P('transactions/' + newId('transactions')), { userId: wr.uid, type: meta.type, amount: delta, balanceBefore: before, balanceAfter: after, referenceId: meta.ref || '', description: meta.desc || '', createdAt: serverTimestamp(), performedBy: S.user ? S.user.id : 'host' });
+  return after;
+}
+
+// ====================================================================
+// AUTH + SESSION
+// ====================================================================
+const toEmail = (v) => { v = clean(v, 120).toLowerCase(); return v.includes('@') ? v : `${v}@bingo.app`; };
+const validUsername = (u) => /^[a-z0-9_.]{3,20}$/.test(u);
+function teardownAll() { clearViewSubs(); S.globalSubs.forEach((u) => { try { u(); } catch { /* ignore */ } }); S.globalSubs = []; stopHost(); S.user = null; S.wallet = null; S.notifs = []; S.notifsLoaded = false; S.walletCbs = []; }
+async function doLogout() { teardownAll(); await signOut(auth); }
+S.walletCbs = [];
+
+onAuthStateChanged(auth, async (u) => {
+  if (S.booting) return;
+  if (!u) { teardownAll(); renderAuth(); return; }
+  try { await startSession(u); } catch (e) { console.error(e); renderAuth('login', friendly(e)); }
+});
+
+async function startSession(u) {
+  teardownAll();
+  let snap = await getDoc(P('users/' + u.uid));
+  if (!snap.exists()) { // self-heal if sign-up was interrupted
+    await setDoc(P('users/' + u.uid), { username: (u.email || 'player').split('@')[0].slice(0, 20), email: u.email || '', photoURL: '', role: 'player', status: 'active', createdAt: serverTimestamp(), lastLoginAt: serverTimestamp() });
+    snap = await getDoc(P('users/' + u.uid));
+  }
+  S.user = { id: u.uid, ...snap.data() };
+  if (S.user.status !== 'active') { renderSuspended(); return; }
+  const ws = await getDoc(P('wallets/' + u.uid));
+  if (!ws.exists()) await setDoc(P('wallets/' + u.uid), { balance: 0, totalDeposited: 0, totalSpent: 0, totalWon: 0, updatedAt: serverTimestamp() });
+  try { await updateDoc(P('users/' + u.uid), { lastLoginAt: serverTimestamp() }); } catch { /* not critical */ }
+  const st = await getDoc(P('settings/main')); S.settings = st.exists() ? st.data() : {};
+  S.globalSubs.push(listen(P('wallets/' + u.uid), (s) => { S.wallet = s.exists() ? s.data() : null; const el = document.getElementById('balchip'); if (el) el.textContent = coins(S.wallet ? S.wallet.balance : 0); S.walletCbs.forEach((f) => f()); }));
+  S.globalSubs.push(listen(query(C('notifications'), where('userId', '==', u.uid)), (s) => {
+    const list = s.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt)); const old = new Set(S.notifs.map((n) => n.id));
+    if (S.notifsLoaded) list.filter((n) => !old.has(n.id) && !n.read).forEach((n) => toast('🔔 ' + n.title + ' ' + (n.message || '').slice(0, 60)));
+    S.notifs = list; S.notifsLoaded = true; const b = document.getElementById('bellbadge'); const c = list.filter((n) => !n.read).length; if (b) { b.textContent = c; b.style.display = c ? '' : 'none'; }
+  }));
+  S.route = S.user.role === 'admin' ? { name: 'overview' } : { name: 'home' };
+  if (S.user.role === 'admin') startHost();
+  renderApp();
+}
+function renderSuspended() {
+  $app.replaceChildren(h('div', { class: 'login' }, h('div', { class: 'hero' }, h('div', { class: 'balls' }, '⛔'), h('div', { class: 'big' }, 'Suspended')),
+    h('div', { class: 'card' }, h('p', {}, 'Your account has been suspended by the administrator. Please contact them.'), h('button', { class: 'btn block', onclick: doLogout }, 'Log out'))));
+}
+
+async function renderAuth(mode = 'login', msg) {
+  const un = h('input', { placeholder: 'Username', autocomplete: 'username', autocapitalize: 'none', maxlength: 60 });
+  const pw = h('input', { type: 'password', placeholder: 'Password', autocomplete: mode === 'login' ? 'current-password' : 'new-password' });
+  const pw2 = h('input', { type: 'password', placeholder: 'Repeat password', autocomplete: 'new-password' });
+  const btn = h('button', { class: 'btn primary block', style: 'margin-top:16px' }, mode === 'login' ? 'Log in' : 'Create account');
+  const go = () => guarded(btn, async () => {
+    if (mode === 'login') { try { await signInWithEmailAndPassword(auth, toEmail(un.value), pw.value); } catch (e) { throw new Error(friendly(e)); } return; }
+    const uname = clean(un.value, 20).toLowerCase(); if (!validUsername(uname)) throw new Error('Username: 3-20 letters, numbers, dot or underscore');
+    if (pw.value.length < 6) throw new Error('Password must be at least 6 characters'); if (pw.value !== pw2.value) throw new Error('Passwords do not match');
+    S.booting = true; let cred;
+    try {
+      try { cred = await createUserWithEmailAndPassword(auth, toEmail(uname), pw.value); } catch (e) { throw new Error(friendly(e)); }
+      await setDoc(P('users/' + cred.user.uid), { username: uname, email: toEmail(uname), photoURL: '', role: 'player', status: 'active', createdAt: serverTimestamp(), lastLoginAt: serverTimestamp() });
+      await setDoc(P('wallets/' + cred.user.uid), { balance: 0, totalDeposited: 0, totalSpent: 0, totalWon: 0, updatedAt: serverTimestamp() });
+    } finally { S.booting = false; }
+    await startSession(cred.user);
+  });
+  btn.onclick = go; (mode === 'login' ? pw : pw2).addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
+  const holder = h('div', {});
+  $app.replaceChildren(h('div', { class: 'login' }, h('div', { class: 'hero' }, h('div', { class: 'balls' }, '🎱🎟️🏆'), h('div', { class: 'big' }, 'Bingo Arena'), h('p', { class: 'muted' }, 'Play live multiplayer Bingo with virtual coins')),
+    msg ? h('div', { class: 'err-box' }, msg) : null, holder,
+    h('div', { class: 'card' }, h('div', { class: 'seg', style: 'margin-bottom:8px' }, h('button', { class: mode === 'login' ? 'on' : '', onclick: () => renderAuth('login') }, 'Log in'), h('button', { class: mode === 'register' ? 'on' : '', onclick: () => renderAuth('register') }, 'Register')),
+      field('Username', un), field('Password', pw), mode === 'register' ? field('Repeat password', pw2) : null, btn)));
+  try {
+    const st = await getDoc(P('settings/main'));
+    if (!st.exists()) holder.append(h('div', { class: 'card' }, h('b', {}, 'First time setup'), h('p', { class: 'muted small' }, 'No administrator exists yet.'), h('button', { class: 'btn gold block', onclick: renderBootstrap }, 'Create the owner (admin) account')));
+  } catch (e) { holder.append(h('div', { class: 'err-box' }, 'Cannot reach the database: ' + friendly(e))); }
+}
+function renderBootstrap() {
+  const email = h('input', { type: 'email', placeholder: 'you@example.com', autocapitalize: 'none' }); const name = h('input', { placeholder: 'Admin username', maxlength: 20 }); const pw = h('input', { type: 'password', placeholder: 'min 6 characters' });
+  const btn = h('button', { class: 'btn primary block', style: 'margin-top:14px' }, 'Create owner account');
+  btn.onclick = () => guarded(btn, async () => {
+    const uname = clean(name.value, 20).toLowerCase(); if (!validUsername(uname) || !email.value.includes('@')) throw new Error('Enter a valid username and email');
+    S.booting = true; let cred;
+    try {
+      try { cred = await createUserWithEmailAndPassword(auth, clean(email.value, 120).toLowerCase(), pw.value); } catch (e) { if (e && e.code === 'auth/email-already-in-use') cred = await signInWithEmailAndPassword(auth, clean(email.value, 120).toLowerCase(), pw.value); else throw e; }
+      await setDoc(P('users/' + cred.user.uid), { username: uname, email: clean(email.value, 120).toLowerCase(), photoURL: '', role: 'admin', status: 'active', createdAt: serverTimestamp(), lastLoginAt: serverTimestamp() });
+      await setDoc(P('wallets/' + cred.user.uid), { balance: 0, totalDeposited: 0, totalSpent: 0, totalWon: 0, updatedAt: serverTimestamp() });
+      await setDoc(P('settings/main'), { currency: 'coins', houseFeePct: 10, defaultDrawInterval: 5, withdrawalsEnabled: false, createdAt: serverTimestamp() });
+    } finally { S.booting = false; }
+    await startSession(cred.user);
+  });
+  $app.replaceChildren(h('div', { class: 'login' }, h('div', { class: 'hero' }, h('div', { class: 'big' }, 'Owner setup')), h('div', { class: 'card' }, h('p', { class: 'muted' }, 'This becomes the main administrator. Use a real email you can access.'), field('Admin username', name), field('Email (used to log in)', email), field('Password', pw), btn,
+    h('button', { class: 'btn block', style: 'margin-top:8px', onclick: () => renderAuth() }, 'Back'))));
+}
+
+// ====================================================================
+// SHELL
+// ====================================================================
+const PLAYER_NAV = [['home', 'Home', '🏠'], ['play', 'Play Bingo', '🎱'], ['cartelas', 'My Cartelas', '🎟️'], ['wallet', 'Wallet', '🪙'], ['history', 'Game History', '📜'], ['profile', 'Profile', '👤']];
+const ADMIN_NAV = [['overview', 'Overview', '📊'], ['players', 'Players', '👥'], ['deposits', 'Deposits', '💳'], ['bingo', 'Bingo', '🎱'], ['finance', 'Finance', '🧾'], ['settings', 'Settings', '⚙️'], ['audit', 'Audit log', '🛡️']];
+const PLAYER_VIEWS = {}; const ADMIN_VIEWS = {};
+function go(name, extra) { S.route = { name, ...(extra || {}) }; renderApp(); window.scrollTo(0, 0); }
+function renderApp() {
+  clearViewSubs(); const admin = S.user.role === 'admin'; const nav = admin ? ADMIN_NAV : PLAYER_NAV; const cur = S.route.name === 'game' ? 'play' : S.route.name;
+  const unread = S.notifs.filter((n) => !n.read).length;
+  const bell = h('button', { class: 'icon-btn', title: 'Notifications', onclick: openNotifications }, '🔔', h('span', { class: 'badge', id: 'bellbadge', style: unread ? '' : 'display:none' }, String(unread)));
+  const top = h('div', { class: 'top' }, h('span', { class: 'brand' }, '🎱 Bingo Arena'), h('span', { class: 'sp' }),
+    admin ? h('span', { class: 'chip', id: 'hostchip' }, '⚙️ Host: …') : h('span', { class: 'chip gold', id: 'balchip', title: 'Coin balance' }, coins(S.wallet ? S.wallet.balance : 0)),
+    admin ? null : h('span', { class: 'chip who' }, S.user.username), bell,
+    admin ? h('button', { class: 'btn sm', onclick: doLogout }, 'Log out') : h('button', { class: 'icon-btn', title: 'Profile', onclick: () => go('profile') }, '👤'));
+  const navEl = h('div', { class: 'nav' + (admin ? '' : ' playernav') }, nav.map(([id, label]) => h('button', { 'data-nav': id, class: cur === id ? 'on' : '', onclick: () => go(id) }, label, id === 'deposits' && S.pendingDeposits ? ` (${S.pendingDeposits})` : '')));
+  const tabs = admin ? null : h('div', { class: 'tabsbar' }, nav.map(([id, label, ic]) => h('button', { class: cur === id ? 'on' : '', onclick: () => go(id) }, h('span', {}, ic), label.replace('Play ', '').replace('Game ', ''))));
+  const main = h('main', {}); $app.replaceChildren(top, navEl, main, tabs);
+  updateHostChip(); main.append(spinner());
+  const view = (admin ? ADMIN_VIEWS : PLAYER_VIEWS)[S.route.name] || (admin ? ADMIN_VIEWS.overview : PLAYER_VIEWS.home);
+  view(main).catch((e) => { console.error(e); main.replaceChildren(h('div', { class: 'card' }, h('p', { class: 'neg' }, friendly(e)))); });
+}
+function openNotifications() {
+  const list = S.notifs;
+  const close = modal('Notifications', h('div', {}, list.length ? list.slice(0, 40).map((n) => h('div', { class: 'card', style: 'padding:12px;margin-bottom:8px;' + (n.read ? 'opacity:.7' : '') }, h('b', {}, n.title), h('div', { class: 'small' }, n.message), h('div', { class: 'muted small' }, fmtDT(n.createdAt)))) : h('p', { class: 'muted' }, 'No notifications yet.'),
+    h('button', { class: 'btn block', onclick: () => close() }, 'Close')), { wide: false });
+  list.filter((n) => !n.read).forEach((n) => updateDoc(P('notifications/' + n.id), { read: true }).catch(() => {}));
+}
+
+// ====================================================================
+// PLAYER: lobby
+// ====================================================================
+function doJoin(room) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const ref = await addDoc(C('roomRequests'), { type: 'join', roomId: room.id, roomName: room.roomName, userId: S.user.id, username: S.user.username, status: 'pending', createdAt: serverTimestamp() });
+      let un = null; const t = setTimeout(() => { if (un) un(); reject(new Error('The host has not processed your request yet. It stays queued. Check My Cartelas in a minute.')); }, 25000);
+      un = onSnapshot(P('roomRequests/' + ref.id), (s) => { const d = s.data(); if (d && d.status !== 'pending') { clearTimeout(t); un(); d.status === 'accepted' ? resolve(d) : reject(new Error(d.reason || 'Join was rejected')); } });
+    } catch (e) { reject(e); }
+  });
+}
+function joinFlow(room) {
+  if (!S.wallet || S.wallet.balance < room.entryFee) return toast('Not enough coins. Request a deposit in your Wallet.', 'err');
+  confirmBox(`Join ${room.roomName}?`, `${coins(room.entryFee)} will be taken from your wallet. Your cartela is created automatically and cannot be changed.`, 'Join game', async () => { await doJoin(room); toast('You joined. Good luck! 🍀', 'ok'); go('game', { roomId: room.id }); });
+}
+function roomsPanel(statuses) {
+  const box = h('div', { class: 'grid g3' }); let rooms = []; let mine = {};
+  const card = (r) => {
+    const part = mine[r.id]; const full = r.currentPlayers >= r.maxPlayers;
+    const btn = part ? h('button', { class: 'btn primary block', onclick: () => go('game', { roomId: r.id }) }, r.status === 'completed' ? 'View result' : 'Open game')
+      : r.status === 'waiting' && !full ? h('button', { class: 'btn gold block', onclick: () => joinFlow(r) }, `Join · ${coins(r.entryFee)}`)
+        : h('button', { class: 'btn block', disabled: true }, r.status === 'waiting' ? 'Room full' : r.status === 'completed' ? 'Finished' : 'In progress');
+    return h('div', { class: 'card room ' + r.status }, h('div', { class: 'row sb' }, h('h2', { style: 'margin:0' }, r.roomName), statusPill(r.status)),
+      h('div', { class: 'stats' }, h('div', {}, h('b', {}, `${r.currentPlayers}/${r.maxPlayers}`), h('span', {}, 'Players')), h('div', {}, h('b', {}, fmt(r.entryFee)), h('span', {}, 'Entry fee')), h('div', {}, h('b', {}, fmt(r.prizePool)), h('span', {}, 'Prize pool'))),
+      h('div', { class: 'muted small' }, `🎯 ${PATTERNS[r.winningPattern] || r.winningPattern} · ⏱ ${r.drawInterval}s per number`), btn);
+  };
+  const draw = () => {
+    const order = { waiting: 0, active: 1, paused: 1, completed: 2 };
+    const list = rooms.filter((r) => r.status !== 'closed' && (!statuses || statuses.includes(r.status))).sort((a, b) => (order[a.status] - order[b.status]) || (tsMs(b.createdAt) - tsMs(a.createdAt))).slice(0, 30);
+    box.replaceChildren(...(list.length ? list.map(card) : [h('div', { class: 'card empty', style: 'grid-column:1/-1' }, 'No rooms here yet. Check back soon!')]));
+  };
+  sub(listen(C('bingoRooms'), (s) => { rooms = s.docs.map((d) => ({ id: d.id, ...d.data() })); draw(); }));
+  sub(listen(query(C('participations'), where('userId', '==', S.user.id)), (s) => { mine = {}; s.docs.forEach((d) => { mine[d.data().roomId] = d.data(); }); draw(); }));
+  box.append(spinner()); return box;
+}
+PLAYER_VIEWS.home = async (main) => {
+  const mineBox = h('div', {});
+  sub(listen(query(C('participations'), where('userId', '==', S.user.id)), (s) => {
+    const live = s.docs.map((d) => d.data()).filter((p) => p.status === 'active');
+    mineBox.replaceChildren(...live.map((p) => h('div', { class: 'card', style: 'border-color:var(--gold)' }, h('div', { class: 'row sb' }, h('div', {}, h('b', {}, '🎮 You are in a game: '), p.roomName), h('button', { class: 'btn gold', onclick: () => go('game', { roomId: p.roomId }) }, 'Go to game')))));
+  }));
+  main.replaceChildren(h('div', { class: 'card' }, h('h1', {}, `Welcome, ${S.user.username}!`), h('p', { class: 'muted' }, 'Join a waiting room, get your cartela automatically and watch the numbers light up live. First to complete the pattern and press BINGO wins the prize pool.')),
+    mineBox, h('h2', {}, 'Available rooms'), roomsPanel(null));
+};
+PLAYER_VIEWS.play = async (main) => {
+  const holder = h('div', {}); let f = S.playFilter || 'waiting';
+  const paint = () => { clearViewSubs(); holder.replaceChildren(roomsPanel(f === 'waiting' ? ['waiting'] : f === 'live' ? ['active', 'paused'] : ['completed'])); };
+  const tab = (id, label) => h('button', { class: f === id ? 'on' : '', onclick: () => { f = S.playFilter = id; renderApp(); } }, label);
+  main.replaceChildren(h('h2', {}, 'Play Bingo'), h('div', { class: 'seg', style: 'margin-bottom:14px;max-width:420px' }, tab('waiting', 'Waiting'), tab('live', 'Live'), tab('done', 'Finished')), holder); paint();
+};
+
+// ====================================================================
+// PLAYER: my cartelas, history, wallet, profile
+// ====================================================================
+function miniCartela(nums, set) { return h('div', { class: 'mini-cartela' }, nums.map((n) => h('i', { class: n === 0 ? 'fr' : set.has(n) ? 'mk' : '' }, n === 0 ? '★' : String(n)))); }
+PLAYER_VIEWS.cartelas = async (main) => {
+  const box = h('div', { class: 'grid g3' }); main.replaceChildren(h('h2', {}, 'My Cartelas'), box); box.append(spinner());
+  sub(listen(query(C('participations'), where('userId', '==', S.user.id)), async (s) => {
+    const list = s.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => tsMs(b.joinedAt) - tsMs(a.joinedAt));
+    const cards = await Promise.all(list.map(async (p) => { const [c, g] = await Promise.all([getData(`bingoRooms/${p.roomId}/cartelas/${p.cartelaId}`).catch(() => null), getData('bingoGames/' + p.roomId).catch(() => null)]);
+      const set = new Set((g && g.drawnNumbers) || []);
+      return h('div', { class: 'card', style: 'cursor:pointer', onclick: () => go('game', { roomId: p.roomId }) }, h('div', { class: 'row sb' }, h('b', {}, p.roomName), statusPill(p.status)), h('div', { style: 'margin:10px 0' }, c ? miniCartela(c.numbers, set) : h('p', { class: 'muted' }, 'Cartela not available')), h('div', { class: 'muted small' }, 'Joined ' + fmtDT(p.joinedAt), p.result ? ` · ${p.result}` : '')); }));
+    box.replaceChildren(...(cards.length ? cards : [h('div', { class: 'card empty', style: 'grid-column:1/-1' }, 'You have no cartelas yet. Join a room to get one.')]));
+  }));
+};
+PLAYER_VIEWS.history = async (main) => {
+  const list = (await qlist('participations', where('userId', '==', S.user.id))).filter((p) => p.status !== 'active').sort((a, b) => tsMs(b.joinedAt) - tsMs(a.joinedAt));
+  let shown = 15; const box = h('div', { class: 'card' });
+  const draw = () => box.replaceChildren(h('h2', {}, 'Game History'), list.length ? h('div', { class: 'table-wrap' }, h('table', {}, h('thead', {}, h('tr', {}, ['Date', 'Room', 'Result', 'Coins'].map((x, i) => h('th', { class: i === 3 ? 'num' : '' }, x)))),
+    h('tbody', {}, list.slice(0, shown).map((p) => h('tr', { style: 'cursor:pointer', onclick: () => go('game', { roomId: p.roomId }) }, h('td', { class: 'nowrap' }, fmtDT(p.joinedAt)), h('td', {}, p.roomName), h('td', {}, h('span', { class: 'pill ' + (p.result === 'Won' ? 'good' : p.result === 'Refunded' ? 'gray' : 'bad') }, p.result || p.status)), h('td', { class: 'num ' + ((p.coins || 0) > 0 ? 'pos' : 'neg') }, (p.coins || 0) > 0 ? '+' + fmt(p.coins) : fmt(p.coins || 0))))))) : h('p', { class: 'muted' }, 'No finished games yet.'),
+    list.length > shown ? h('button', { class: 'btn block', style: 'margin-top:10px', onclick: () => { shown += 15; draw(); } }, 'Load more') : null);
+  draw(); main.replaceChildren(box);
+};
+
+function compressImage(file, maxSide = 1000) {
+  return new Promise((resolve, reject) => {
+    if (!file || !/^image\//.test(file.type)) return reject(new Error('Please choose a photo (JPG or PNG)'));
+    if (file.size > 12e6) return reject(new Error('Photo is too large (max 12 MB)'));
+    const img = new Image(); const url = URL.createObjectURL(file);
+    img.onload = () => { const sc = Math.min(1, maxSide / Math.max(img.width, img.height)); const cv = document.createElement('canvas'); cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc); cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height); URL.revokeObjectURL(url);
+      let q = 0.72, out = cv.toDataURL('image/jpeg', q); while (out.length > 700000 && q > 0.3) { q -= 0.1; out = cv.toDataURL('image/jpeg', q); } out.length > 780000 ? reject(new Error('Photo is still too large')) : resolve(out); };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not read that photo')); }; img.src = url;
+  });
+}
+PLAYER_VIEWS.wallet = async (main) => {
+  const kp = h('div', { class: 'grid g4', style: 'margin-bottom:16px' }); const drawKp = () => { const w = S.wallet || {}; kp.replaceChildren(kpi('Balance', coins(w.balance), 'available', '🪙'), kpi('Total deposited', coins(w.totalDeposited), '', '⬇️'), kpi('Total spent', coins(w.totalSpent), 'entry fees', '🎟️'), kpi('Total won', coins(w.totalWon), '', '🏆')); };
+  drawKp(); S.walletCbs.push(drawKp); sub(() => { S.walletCbs = S.walletCbs.filter((f) => f !== drawKp); });
+  const amt = h('input', { type: 'number', min: 1, step: 1, inputmode: 'numeric', placeholder: 'e.g. 100' }); const file = h('input', { type: 'file', accept: 'image/*' }); const ref = h('input', { placeholder: 'Transaction reference (optional)', maxlength: 80 }); const notes = h('textarea', { rows: 2, placeholder: 'Notes (optional)', maxlength: 300 });
+  const prev = h('div', {}); file.addEventListener('change', async () => { prev.replaceChildren(); if (file.files[0]) { try { const d = await compressImage(file.files[0]); prev.append(h('img', { class: 'evidence', src: d, style: 'max-height:180px' })); } catch (e) { toast(e.message, 'err'); } } });
+  const send = h('button', { class: 'btn primary block', style: 'margin-top:14px' }, 'Submit deposit request');
+  send.onclick = () => guarded(send, async () => {
+    const a = num(amt.value); if (!Number.isInteger(a) || a <= 0 || a > 1000000) throw new Error('Enter a whole number of coins (1 - 1,000,000)');
+    const r = clean(ref.value, 80); if (!file.files[0] && !r) throw new Error('Attach payment evidence (photo) or enter a transaction reference');
+    const id = newId('depositRequests'); let img = null; if (file.files[0]) img = await compressImage(file.files[0]);
+    if (img) await setDoc(P('depositEvidence/' + id), { userId: S.user.id, img });
+    await setDoc(P('depositRequests/' + id), { userId: S.user.id, username: S.user.username, amount: a, hasEvidence: !!img, transactionReference: r, notes: clean(notes.value, 300), status: 'pending', createdAt: serverTimestamp(), reviewedAt: null, reviewedBy: null, rejectionReason: '' });
+    toast('Deposit request sent. You will be notified.', 'ok'); amt.value = ''; ref.value = ''; notes.value = ''; file.value = ''; prev.replaceChildren();
+  });
+  const depBox = h('div', {}); const txBox = h('div', {}); const wdBox = h('div', {});
+  let deps = [], txs = [], wds = [], shown = 15;
+  const drawDep = () => depBox.replaceChildren(deps.length ? h('div', { class: 'table-wrap' }, h('table', {}, h('thead', {}, h('tr', {}, ['Date', 'Coins', 'Status', 'Note'].map((x, i) => h('th', { class: i === 1 ? 'num' : '' }, x)))), h('tbody', {}, deps.map((d) => h('tr', {}, h('td', { class: 'nowrap' }, fmtDT(d.createdAt)), h('td', { class: 'num' }, fmt(d.amount)), h('td', {}, statusPill(d.status)), h('td', { class: 'small muted' }, d.status === 'rejected' ? d.rejectionReason : d.transactionReference || '')))))) : h('p', { class: 'muted' }, 'No deposit requests yet.'));
+  const drawTx = () => txBox.replaceChildren(txs.length ? h('div', { class: 'table-wrap' }, h('table', {}, h('thead', {}, h('tr', {}, ['Date', 'Type', 'Details', 'Coins', 'Balance'].map((x, i) => h('th', { class: i > 2 ? 'num' : '' }, x)))), h('tbody', {}, txs.slice(0, shown).map((t) => h('tr', {}, h('td', { class: 'nowrap' }, fmtDT(t.createdAt)), h('td', {}, h('span', { class: 'pill gray' }, String(t.type).replace('_', ' '))), h('td', { class: 'small' }, t.description), h('td', { class: 'num ' + (t.amount >= 0 ? 'pos' : 'neg') }, (t.amount > 0 ? '+' : '') + fmt(t.amount)), h('td', { class: 'num' }, fmt(t.balanceAfter))))))) : h('p', { class: 'muted' }, 'No transactions yet.'), txs.length > shown ? h('button', { class: 'btn block', style: 'margin-top:10px', onclick: () => { shown += 15; drawTx(); } }, 'Load more') : null);
+  sub(listen(query(C('depositRequests'), where('userId', '==', S.user.id)), (s) => { deps = s.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt)); drawDep(); }));
+  sub(listen(query(C('transactions'), where('userId', '==', S.user.id)), (s) => { txs = s.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt)); drawTx(); }));
+  const st = await getDoc(P('settings/main')); S.settings = st.exists() ? st.data() : S.settings;
+  const wAmt = h('input', { type: 'number', min: 1, step: 1, placeholder: 'Coins' }); const wNote = h('input', { placeholder: 'Note (optional)', maxlength: 200 }); const wBtn = h('button', { class: 'btn block', style: 'margin-top:10px' }, 'Request withdrawal (simulation)');
+  wBtn.onclick = () => guarded(wBtn, async () => { const a = num(wAmt.value); if (!Number.isInteger(a) || a <= 0) throw new Error('Enter a whole number of coins'); if (!S.wallet || a > S.wallet.balance) throw new Error('Not enough coins');
+    await addDoc(C('withdrawalRequests'), { userId: S.user.id, username: S.user.username, amount: a, notes: clean(wNote.value, 200), status: 'pending', createdAt: serverTimestamp(), reviewedAt: null, reviewedBy: null, rejectionReason: '' }); toast('Withdrawal request sent', 'ok'); wAmt.value = ''; wNote.value = ''; });
+  const drawWd = () => wdBox.replaceChildren(S.settings.withdrawalsEnabled ? h('div', {}, h('p', { class: 'muted small' }, 'Simulation only: this system never pays out real money.'), field('Coins', wAmt), field('Note', wNote), wBtn, wds.length ? h('table', { style: 'margin-top:12px' }, h('tbody', {}, wds.map((d) => h('tr', {}, h('td', {}, fmtDT(d.createdAt)), h('td', { class: 'num' }, fmt(d.amount)), h('td', {}, statusPill(d.status)))))) : null) : h('p', { class: 'muted' }, '🔒 Withdrawals are currently disabled by the administrator.'));
+  sub(listen(query(C('withdrawalRequests'), where('userId', '==', S.user.id)), (s) => { wds = s.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt)); drawWd(); }));
+  main.replaceChildren(h('h2', {}, 'Wallet'), kp,
+    h('div', { class: 'grid g2' }, h('div', { class: 'card' }, h('h2', {}, 'Request coins'), h('p', { class: 'muted small' }, 'Send your payment evidence. The administrator checks it and credits the exact coins you requested.'), field('Coins requested', amt), field('Payment evidence (photo)', file), prev, field('Transaction reference', ref), field('Notes', notes), send),
+      h('div', { class: 'card' }, h('h2', {}, 'Deposit history'), depBox, h('h2', { style: 'margin-top:18px' }, 'Withdrawal'), wdBox)),
+    h('div', { class: 'card' }, h('h2', {}, 'Transaction history'), txBox));
+};
+PLAYER_VIEWS.profile = async (main) => {
+  const w = S.wallet || {}; const o = h('input', { type: 'password', autocomplete: 'current-password' }); const n = h('input', { type: 'password', autocomplete: 'new-password' }); const n2 = h('input', { type: 'password', autocomplete: 'new-password' });
+  const btn = h('button', { class: 'btn primary', style: 'margin-top:12px' }, 'Change password');
+  btn.onclick = () => guarded(btn, async () => { if (n.value.length < 6) throw new Error('New password must be at least 6 characters'); if (n.value !== n2.value) throw new Error('New passwords do not match'); const u = auth.currentUser;
+    try { await reauthenticateWithCredential(u, EmailAuthProvider.credential(u.email, o.value)); } catch { throw new Error('Current password is wrong'); } await updatePassword(u, n.value); toast('Password changed', 'ok'); o.value = n.value = n2.value = ''; });
+  main.replaceChildren(h('h2', {}, 'Profile'), h('div', { class: 'grid g2' }, h('div', { class: 'card' }, h('div', { style: 'font-size:3rem' }, '👤'), h('h2', {}, S.user.username), h('p', { class: 'muted' }, S.user.email && !S.user.email.endsWith('@bingo.app') ? S.user.email : ''), h('p', { class: 'small muted' }, 'Member since ' + fmtDT(S.user.createdAt)),
+    h('div', { class: 'grid g2' }, kpi('Spent', coins(w.totalSpent)), kpi('Won', coins(w.totalWon))), h('button', { class: 'btn block', style: 'margin-top:14px', onclick: doLogout }, 'Log out')),
+    h('div', { class: 'card' }, h('h2', {}, 'Change password'), field('Current password', o), field('New password', n), field('Repeat new password', n2), btn)));
+};
+
+// ====================================================================
+// PLAYER: live game screen
+// ====================================================================
+const colVar = (n) => `--bc:var(--c${letterOf(n)})`;
+const ballEl = (n, cls = '') => h('div', { class: `ball ${letterOf(n)} ${cls}`, style: colVar(n) }, h('div', {}, h('span', {}, letterOf(n)), h('b', {}, String(n))));
+const miniBall = (n) => h('div', { class: `mini ${letterOf(n)}`, style: colVar(n) }, String(n));
+
+PLAYER_VIEWS.game = async (main) => {
+  const roomId = S.route.roomId; const uid = S.user.id;
+  let room = null, game = null, player = null, cart = null, claims = [], players = [], prevCount = -1, tickTimer = null, lastClaimStatus = null;
+  const stage = h('div', {}); main.replaceChildren(stage);
+  const cdText = h('b', { id: 'cd' }, '—');
+  async function loadCartela() { if (cart || !player) return; try { cart = await getData(`bingoRooms/${roomId}/cartelas/${player.cartelaId}`); } catch (e) { console.warn(e); } }
+  const drawn = () => new Set((game && game.drawnNumbers) || []);
+
+  const claimBtn = h('button', { class: 'btn gold block', style: 'font-size:1.4rem;padding:14px' }, '🎉 BINGO!');
+  let cooldown = 0;
+  claimBtn.onclick = () => guarded(claimBtn, async () => {
+    if (!game || game.status !== 'active') throw new Error('The game is not running');
+    if (Date.now() < cooldown) throw new Error('Please wait a few seconds before claiming again');
+    const mineClaim = claims[0]; if (mineClaim && mineClaim.status === 'pending') throw new Error('Your claim is already being checked');
+    cooldown = Date.now() + 4000; const id = `${roomId}_${uid}`;
+    if (mineClaim) await updateDoc(P('claims/' + id), { status: 'pending', createdAt: serverTimestamp(), reason: '' });
+    else await setDoc(P('claims/' + id), { roomId, userId: uid, username: S.user.username, status: 'pending', createdAt: serverTimestamp(), reason: '' });
+    toast('Claim sent. The host is checking your cartela…');
+  });
+
+  function paint() {
+    if (!room) { stage.replaceChildren(h('div', { class: 'card empty' }, 'This room no longer exists.', h('div', {}, h('button', { class: 'btn', style: 'margin-top:12px', onclick: () => go('play') }, 'Back to rooms')))); return; }
+    const set = drawn(); const dl = (game && game.drawnNumbers) || []; const last = dl[dl.length - 1];
+    const status = room.status; const inRoom = !!player; const pattern = room.winningPattern;
+    const lines = cart ? completedLines(cart.numbers, set, pattern) : []; const winCells = new Set(lines.flat());
+    const complete = lines.length > 0; const prog = cart ? bestProgress(cart.numbers, set, pattern) : 0;
+    const newest = dl.length > prevCount && prevCount >= 0 ? last : null; prevCount = dl.length;
+
+    const head = h('div', { class: 'card' }, h('div', { class: 'row sb' }, h('div', {}, h('h1', { style: 'margin:0' }, room.roomName), h('div', { class: 'muted small' }, `🎯 ${PATTERNS[pattern]} · ${PATTERN_HELP[pattern]}`)), statusPill(status)),
+      h('div', { class: 'row', style: 'margin-top:10px' }, h('span', { class: 'chip' }, `👥 ${room.currentPlayers}/${room.maxPlayers}`), h('span', { class: 'chip' }, `Entry ${coins(room.entryFee)}`), h('span', { class: 'chip gold' }, `Prize ${coins(room.prizePool)}`), h('span', { class: 'chip' }, `⏱ ${room.drawInterval}s`)));
+
+    const left = h('div', { class: 'card', style: 'text-align:center' });
+    if (status === 'waiting') left.append(h('h2', {}, 'Waiting for the game to start'), h('p', { class: 'muted' }, `Need at least ${room.minPlayers || 2} players. The host starts the game${room.currentPlayers >= room.maxPlayers ? ' (room is full)' : ''}.`), h('div', { style: 'font-size:3rem' }, '⏳'));
+    else {
+      left.append(last ? ballEl(last, newest === last ? 'pop' : '') : h('div', { class: 'muted', style: 'padding:30px' }, 'No number drawn yet'),
+        h('div', { class: 'muted small' }, `${dl.length} of 75 drawn`),
+        h('div', { class: 'recent' }, dl.slice(-6, -1).reverse().map(miniBall)));
+      if (status === 'active') left.append(h('div', { class: 'chip', style: 'margin:6px auto' }, '⏱ Next number in ', cdText));
+      if (status === 'paused') left.append(h('div', { class: 'pill warn' }, '⏸ Paused by the host'));
+      if (status === 'completed') left.append(h('div', { class: 'pill good' }, 'Game finished'));
+    }
+    const board = h('div', { class: 'board', style: 'margin-top:12px' }); LETTERS.forEach((L, r) => { board.append(h('i', { class: 'h' }, L)); for (let i = 1; i <= 15; i++) { const n = r * 15 + i; board.append(h('i', { class: (set.has(n) ? 'd ' : '') + L, style: colVar(n) }, String(n))); } });
+    left.append(board);
+
+    const right = h('div', { class: 'card' });
+    if (!inRoom) right.append(h('h2', {}, 'You are watching'), h('p', { class: 'muted' }, status === 'waiting' ? 'Join the room to get a cartela.' : 'You did not join this game.'),
+      status === 'waiting' && room.currentPlayers < room.maxPlayers && S.user.role !== 'admin' ? h('button', { class: 'btn gold block', onclick: () => joinFlow({ id: roomId, ...room }) }, `Join · ${coins(room.entryFee)}`) : null);
+    else if (!cart) right.append(h('h2', {}, 'Your cartela'), spinner());
+    else {
+      const cells = h('div', { class: 'cartela' }); LETTERS.forEach((L) => cells.append(h('div', { class: 'hd ' + L, style: `--bc:var(--c${L})` }, L)));
+      cart.numbers.forEach((n, i) => cells.append(h('div', { class: 'cell' + (n === 0 ? ' free' : set.has(n) ? ' mk' : '') + (winCells.has(i) ? ' win' : '') + (n === newest ? ' new' : '') }, n === 0 ? 'FREE' : String(n))));
+      right.append(h('div', { class: 'row sb' }, h('h2', { style: 'margin:0' }, 'Your cartela'), h('span', { class: 'muted small' }, `${Math.round(prog * 100)}% of best line`)), cells);
+      const myClaim = claims[0];
+      if (status === 'active') {
+        claimBtn.disabled = false; right.append(h('div', { style: 'margin-top:14px' }, claimBtn));
+        if (myClaim && myClaim.status === 'pending') right.append(h('p', { class: 'muted small', style: 'text-align:center' }, '⏳ Claim sent. Waiting for host validation…'));
+        if (myClaim && myClaim.status === 'rejected') right.append(h('p', { class: 'neg small', style: 'text-align:center' }, '❌ Last claim rejected: ' + (myClaim.reason || 'not a valid win')));
+        if (complete) right.append(h('p', { class: 'pos small', style: 'text-align:center' }, '✨ Your cartela looks complete. Press BINGO now!'));
+      }
+      if (status === 'waiting') right.append(h('button', { class: 'btn block', style: 'margin-top:14px', onclick: () => confirmBox('Leave this room?', 'Your entry fee is refunded in full.', 'Leave', async () => { await leaveRoom(); toast('You left the room. Entry fee refunded.', 'ok'); go('play'); }) }, 'Leave room (refund)'));
+    }
+    const plist = h('div', { class: 'card' }, h('h2', {}, `Players (${players.length})`), h('div', { class: 'row' }, players.map((p) => h('span', { class: 'chip', style: p.id === uid ? 'border-color:var(--gold)' : '' }, p.username + (game && (game.winners || []).some((w) => w.uid === p.id) ? ' 🏆' : '')))));
+    stage.replaceChildren(head, h('div', { class: 'stage', style: 'margin-top:14px' }, left, right), h('div', { style: 'margin-top:14px' }, plist), h('button', { class: 'btn', style: 'margin-top:14px', onclick: () => go('play') }, '← Back to rooms'));
+    tick();
+    if (status === 'completed' && game && !S['seen_' + roomId]) { S['seen_' + roomId] = true; showResult(); }
+  }
+  async function leaveRoom() {
+    const ref = await addDoc(C('roomRequests'), { type: 'leave', roomId, roomName: room.roomName, userId: uid, username: S.user.username, status: 'pending', createdAt: serverTimestamp() });
+    await new Promise((res, rej) => { let un = null; const t = setTimeout(() => { if (un) un(); rej(new Error('Host has not processed it yet. It stays queued.')); }, 25000);
+      un = onSnapshot(P('roomRequests/' + ref.id), (s) => { const d = s.data(); if (d && d.status !== 'pending') { clearTimeout(t); un(); d.status === 'accepted' ? res() : rej(new Error(d.reason || 'Could not leave')); } }); });
+  }
+  function showResult() {
+    const w = game.winners || []; if (!w.length) { if (player) modal('Game over', h('div', {}, h('p', {}, 'Nobody won this round. All entry fees were refunded.'), h('button', { class: 'btn block', onclick: () => document.querySelector('.modal-bg').remove() }, 'OK'))); return; }
+    const me = w.some((x) => x.uid === uid); const close = modal(me ? '🏆 YOU WON!' : 'Game over', h('div', { style: 'text-align:center' }, h('div', { style: 'font-size:3rem' }, me ? '🎉' : '🏁'), h('p', {}, 'Winner' + (w.length > 1 ? 's' : '') + ': ', h('b', {}, w.map((x) => x.username).join(', '))), h('p', {}, 'Prize each: ', h('b', {}, coins(game.prizePerWinner))), h('button', { class: 'btn primary block', onclick: () => close() }, 'Close')));
+  }
+  function tick() {
+    const el = document.getElementById('cd'); if (!el) return; if (!game || room.status !== 'active') { el.textContent = '—'; return; }
+    const ms = tsMs(game.nextDrawAt) - Date.now(); el.textContent = ms > 0 ? Math.ceil(ms / 1000) + 's' : 'any moment…';
+  }
+  tickTimer = setInterval(tick, 500); sub(() => clearInterval(tickTimer));
+
+  sub(listen(P('bingoRooms/' + roomId), (s) => { room = s.exists() ? s.data() : null; paint(); }));
+  sub(listen(P('bingoGames/' + roomId), (s) => { game = s.exists() ? s.data() : null; paint(); }));
+  sub(listen(C(`bingoRooms/${roomId}/players`), async (s) => {
+    players = s.docs.map((d) => ({ id: d.id, ...d.data() })); player = players.find((p) => p.id === uid) || null; await loadCartela(); paint();
+  }));
+  sub(listen(query(C('claims'), where('userId', '==', uid), where('roomId', '==', roomId)), (s) => {
+    claims = s.docs.map((d) => d.data()); const st = claims[0] && claims[0].status;
+    if (st === 'rejected' && lastClaimStatus === 'pending') toast('Claim rejected: ' + (claims[0].reason || 'not a valid win'), 'err');
+    if (st === 'approved' && lastClaimStatus === 'pending') toast('🏆 Claim approved!', 'ok');
+    lastClaimStatus = st; paint();
+  }));
+};
+
+// ====================================================================
+// HOST ENGINE (runs in the ADMIN's browser; free plan = no Cloud Functions)
+// Everything that touches money or the draw order happens here, inside
+// Firestore transactions, and only an admin account is allowed by the
+// security rules to write these documents.
+// ====================================================================
+const HOST = { subs: [], timer: null, claimTimer: null, games: {}, rooms: {}, claims: [], busy: new Set(), drawing: 0 };
+const pad2 = (n) => String(n).padStart(2, '0');
+const prizeOf = (room, n) => r2(room.entryFee * n * (1 - (room.houseFeePct || 0) / 100));
+
+function updateHostChip() {
+  const el = document.getElementById('hostchip'); if (!el) return;
+  const live = Object.values(HOST.games).filter((g) => g.status === 'active').length;
+  el.textContent = HOST.timer ? `⚙️ Host ON · ${live} live` : '⚙️ Host OFF'; el.className = 'chip' + (HOST.timer ? ' gold' : '');
+}
+function stopHost() {
+  HOST.subs.forEach((u) => { try { u(); } catch { /* ignore */ } }); HOST.subs = []; if (HOST.timer) clearInterval(HOST.timer); HOST.timer = null;
+  if (HOST.claimTimer) clearTimeout(HOST.claimTimer); HOST.claimTimer = null; HOST.games = {}; HOST.rooms = {}; HOST.claims = []; HOST.busy.clear();
+}
+function startHost() {
+  stopHost();
+  HOST.subs.push(listen(query(C('roomRequests'), where('status', '==', 'pending')), (s) => s.docs.forEach((d) => hostRequest(d.id, d.data()))));
+  HOST.subs.push(listen(query(C('claims'), where('status', '==', 'pending')), (s) => { HOST.claims = s.docs.map((d) => ({ id: d.id, ...d.data() })); if (HOST.claims.length) scheduleClaims(); }));
+  HOST.subs.push(listen(C('bingoGames'), (s) => { HOST.games = {}; s.docs.forEach((d) => { HOST.games[d.id] = d.data(); }); updateHostChip(); }));
+  HOST.subs.push(listen(C('bingoRooms'), (s) => { HOST.rooms = {}; s.docs.forEach((d) => { HOST.rooms[d.id] = d.data(); }); sweepRefunds(); }));
+  HOST.subs.push(listen(query(C('depositRequests'), where('status', '==', 'pending')), (s) => {
+    S.pendingDeposits = s.size; const b = document.querySelector('[data-nav=deposits]'); if (b) b.textContent = 'Deposits' + (s.size ? ` (${s.size})` : '');
+  }));
+  HOST.timer = setInterval(hostTick, 1000); updateHostChip();
+}
+function once(key, fn) { if (HOST.busy.has(key)) return Promise.resolve(); HOST.busy.add(key); return Promise.resolve().then(fn).catch((e) => console.warn('host', key, e && e.message)).finally(() => HOST.busy.delete(key)); }
+
+function hostTick() {
+  const now = Date.now();
+  for (const [id, g] of Object.entries(HOST.games)) {
+    const room = HOST.rooms[id]; if (!room) continue;
+    if (g.status === 'active' && room.status === 'active' && now >= (g.nextDrawAt || 0)) once('draw_' + id, () => hostDraw(id));
+  }
+  for (const [id, room] of Object.entries(HOST.rooms)) if (room.status === 'waiting' && room.autoStart !== false && room.currentPlayers >= room.maxPlayers) once('start_' + id, () => hostStartGame(id));
+  updateHostChip();
+}
+
+// ---------- join / leave ----------
+function hostRequest(id, r) { if (r.status !== 'pending') return; once('req_' + id, () => (r.type === 'leave' ? hostLeave(id) : hostJoin(id))); }
+async function hostJoin(reqId) {
+  await runTransaction(db, async (tx) => {
+    const rq = P('roomRequests/' + reqId); const rs = await tx.get(rq); if (!rs.exists() || rs.data().status !== 'pending') return;
+    const r = rs.data(); const roomRef = P('bingoRooms/' + r.roomId); const room = await tx.get(roomRef);
+    const pRef = P(`bingoRooms/${r.roomId}/players/${r.userId}`); const ps = await tx.get(pRef); const wr = await txWallet(tx, r.userId);
+    const rej = (reason) => tx.update(rq, { status: 'rejected', reason, reviewedAt: serverTimestamp() });
+    if (!room.exists()) return rej('Room not found'); const rm = room.data();
+    if (rm.status !== 'waiting') return rej('The game already started'); if (ps.exists()) return rej('You already joined this room');
+    if (rm.currentPlayers >= rm.maxPlayers) return rej('The room is full'); if (Number(wr.w.balance || 0) < rm.entryFee) return rej('Not enough coins');
+    const cid = newId(`bingoRooms/${r.roomId}/cartelas`); const n = rm.currentPlayers + 1;
+    txApply(tx, wr, -rm.entryFee, 'spent', { type: 'entry_fee', ref: r.roomId, desc: 'Entry fee: ' + rm.roomName });
+    tx.set(P(`bingoRooms/${r.roomId}/cartelas/${cid}`), { userId: r.userId, numbers: genCartela(), createdAt: serverTimestamp() });
+    tx.set(pRef, { username: r.username, cartelaId: cid, joinedAt: serverTimestamp() });
+    tx.set(P(`participations/${r.roomId}_${r.userId}`), { userId: r.userId, roomId: r.roomId, roomName: rm.roomName, cartelaId: cid, entryFee: rm.entryFee, status: 'active', result: '', coins: 0, joinedAt: serverTimestamp() });
+    tx.update(roomRef, { currentPlayers: n, prizePool: prizeOf(rm, n) });
+    tx.update(rq, { status: 'accepted', reviewedAt: serverTimestamp() });
+  });
+}
+async function hostLeave(reqId) {
+  await runTransaction(db, async (tx) => {
+    const rq = P('roomRequests/' + reqId); const rs = await tx.get(rq); if (!rs.exists() || rs.data().status !== 'pending') return;
+    const r = rs.data(); const roomRef = P('bingoRooms/' + r.roomId); const room = await tx.get(roomRef);
+    const pRef = P(`bingoRooms/${r.roomId}/players/${r.userId}`); const ps = await tx.get(pRef); const wr = await txWallet(tx, r.userId);
+    const rej = (reason) => tx.update(rq, { status: 'rejected', reason, reviewedAt: serverTimestamp() });
+    if (!room.exists() || room.data().status !== 'waiting') return rej('You can only leave before the game starts'); if (!ps.exists()) return rej('You are not in this room');
+    const rm = room.data(); const n = Math.max(0, rm.currentPlayers - 1);
+    txApply(tx, wr, rm.entryFee, 'refund', { type: 'refund', ref: r.roomId, desc: 'Left room: ' + rm.roomName });
+    tx.delete(P(`bingoRooms/${r.roomId}/cartelas/${ps.data().cartelaId}`)); tx.delete(pRef); tx.delete(P(`participations/${r.roomId}_${r.userId}`));
+    tx.update(roomRef, { currentPlayers: n, prizePool: prizeOf(rm, n) }); tx.update(rq, { status: 'accepted', reviewedAt: serverTimestamp() });
+  });
+}
+
+// ---------- start / draw / pause ----------
+async function hostStartGame(roomId) {
+  const seq = shuffle(Array.from({ length: 75 }, (_, i) => i + 1));
+  const started = await runTransaction(db, async (tx) => {
+    const roomRef = P('bingoRooms/' + roomId); const gRef = P('bingoGames/' + roomId); const room = await tx.get(roomRef); const g = await tx.get(gRef);
+    if (!room.exists() || room.data().status !== 'waiting') return false; const rm = room.data();
+    if (rm.currentPlayers < (rm.minPlayers || 2)) throw new Error(`At least ${rm.minPlayers || 2} players are needed to start`);
+    tx.set(P('bingoSecrets/' + roomId), { sequence: seq, createdAt: serverTimestamp() });
+    tx.update(roomRef, { status: 'active', startedAt: serverTimestamp(), prizePool: prizeOf(rm, rm.currentPlayers) });
+    tx.set(gRef, { status: 'active', drawnNumbers: [], drawCount: 0, lastNumber: 0, winners: [], startedAt: serverTimestamp(), nextDrawAt: Date.now() + 4000, roomName: rm.roomName }, { merge: true });
+    return true;
+  });
+  if (started) {
+    await audit('start_game', roomId);
+    try { const ps = await qlist(`bingoRooms/${roomId}/players`); const rm = HOST.rooms[roomId]; await Promise.all(ps.map((p) => notify(p.id, '🎱 Game started', `${rm ? rm.roomName : 'Your game'} is live now!`, 'game'))); } catch { /* optional */ }
+  }
+  return started;
+}
+async function hostDraw(roomId) {
+  let exhausted = false;
+  await runTransaction(db, async (tx) => {
+    const gRef = P('bingoGames/' + roomId); const g = await tx.get(gRef); const rm = await tx.get(P('bingoRooms/' + roomId)); const sc = await tx.get(P('bingoSecrets/' + roomId));
+    if (!g.exists() || !rm.exists() || !sc.exists()) return; const gd = g.data(); if (gd.status !== 'active' || rm.data().status !== 'active') return;
+    if (Date.now() < (gd.nextDrawAt || 0) - 300) return; // another host window already drew
+    const k = gd.drawCount; const n = sc.data().sequence[k]; if (!n) { exhausted = true; return; }
+    tx.set(P(`bingoGames/${roomId}/draws/${pad2(k + 1)}`), { number: n, seq: k + 1, at: serverTimestamp() });
+    tx.update(gRef, { drawnNumbers: [...gd.drawnNumbers, n], drawCount: k + 1, lastNumber: n, nextDrawAt: Date.now() + rm.data().drawInterval * 1000 });
+  });
+  if (exhausted) await hostCancel(roomId, 'completed', 'Nobody claimed a win. All 75 numbers were drawn.');
+}
+async function hostSetPaused(roomId, paused) {
+  await runTransaction(db, async (tx) => {
+    const roomRef = P('bingoRooms/' + roomId); const gRef = P('bingoGames/' + roomId); const rm = await tx.get(roomRef); const g = await tx.get(gRef); if (!rm.exists()) return;
+    const want = paused ? 'active' : 'paused'; if (rm.data().status !== want) throw new Error(paused ? 'Game is not running' : 'Game is not paused');
+    tx.update(roomRef, { status: paused ? 'paused' : 'active' }); tx.update(gRef, { status: paused ? 'paused' : 'active', nextDrawAt: Date.now() + rm.data().drawInterval * 1000 });
+  });
+  await audit(paused ? 'pause_game' : 'resume_game', roomId);
+}
+
+// ---------- cancel / refund (also used when nobody wins) ----------
+async function hostCancel(roomId, finalStatus, reason) {
+  await runTransaction(db, async (tx) => {
+    const roomRef = P('bingoRooms/' + roomId); const gRef = P('bingoGames/' + roomId); const rm = await tx.get(roomRef); const g = await tx.get(gRef);
+    if (!rm.exists() || ['closed', 'completed'].includes(rm.data().status)) return;
+    tx.update(roomRef, { status: finalStatus, needsRefund: true, closeReason: reason || '', completedAt: serverTimestamp() });
+    if (g.exists()) tx.update(gRef, { status: finalStatus, winners: [], completedAt: serverTimestamp(), nextDrawAt: 0 });
+  });
+  await refundRoom(roomId, reason); await audit('close_room', `${roomId}: ${reason || ''}`);
+}
+async function refundRoom(roomId, reason) {
+  const parts = await qlist('participations', where('roomId', '==', roomId));
+  for (const p of parts) {
+    if (p.status !== 'active') continue;
+    try {
+      await runTransaction(db, async (tx) => {
+        const pRef = P(`participations/${roomId}_${p.userId}`); const ps = await tx.get(pRef); if (!ps.exists() || ps.data().status !== 'active') return;
+        const wr = await txWallet(tx, p.userId); const fee = Number(ps.data().entryFee || 0);
+        txApply(tx, wr, fee, 'refund', { type: 'refund', ref: roomId, desc: 'Refund: ' + (p.roomName || roomId) });
+        tx.update(pRef, { status: 'refunded', result: 'Refunded', coins: 0 });
+        tx.set(P('notifications/' + newId('notifications')), notifyDoc(p.userId, 'Game cancelled', `${p.roomName}: your ${fee} coins were refunded. ${reason || ''}`, 'refund'));
+      });
+    } catch (e) { console.warn('refund failed', p.userId, e); }
+  }
+  const left = (await qlist('participations', where('roomId', '==', roomId))).filter((p) => p.status === 'active');
+  if (!left.length) await updateDoc(P('bingoRooms/' + roomId), { needsRefund: false }).catch(() => {});
+}
+function sweepRefunds() { for (const [id, r] of Object.entries(HOST.rooms)) if (r.needsRefund === true) once('refund_' + id, () => refundRoom(id, r.closeReason)); }
+
+// ---------- claims ----------
+function scheduleClaims() { if (HOST.claimTimer) return; HOST.claimTimer = setTimeout(() => { HOST.claimTimer = null; once('claims', processClaims); }, 1200); }
+async function rejectClaim(id, reason) {
+  await runTransaction(db, async (tx) => { const ref = P('claims/' + id); const s = await tx.get(ref); if (s.exists() && s.data().status === 'pending') tx.update(ref, { status: 'rejected', reason, reviewedAt: serverTimestamp() }); });
+}
+async function processClaims() {
+  const pending = HOST.claims.filter((c) => c.status === 'pending' && tsMs(c.createdAt)); const byRoom = {};
+  pending.forEach((c) => { (byRoom[c.roomId] = byRoom[c.roomId] || []).push(c); });
+  for (const [roomId, list] of Object.entries(byRoom)) { try { await processRoomClaims(roomId, list); } catch (e) { console.warn('claims', roomId, e); } }
+}
+async function processRoomClaims(roomId, list) {
+  const game = await getData('bingoGames/' + roomId); const room = await getData('bingoRooms/' + roomId);
+  if (!game || !room || game.status !== 'active') { for (const c of list) await rejectClaim(c.id, 'The game is not running'); return; }
+  const draws = (await qlist(`bingoGames/${roomId}/draws`)).sort((a, b) => a.seq - b.seq); const valid = [];
+  for (const c of list.sort((a, b) => tsMs(a.createdAt) - tsMs(b.createdAt))) {
+    const p = await getData(`bingoRooms/${roomId}/players/${c.userId}`); const cart = p && await getData(`bingoRooms/${roomId}/cartelas/${p.cartelaId}`);
+    if (!cart) { await rejectClaim(c.id, 'You are not a player in this game'); continue; }
+    const upto = draws.filter((d) => tsMs(d.at) <= tsMs(c.createdAt)); const set = new Set(upto.map((d) => d.number));
+    if (completedLines(cart.numbers, set, room.winningPattern).length) valid.push({ c, k: upto.length });
+    else await rejectClaim(c.id, `Your cartela does not complete "${PATTERNS[room.winningPattern]}" yet (${upto.length} numbers had been drawn).`);
+  }
+  if (!valid.length) return;
+  const minK = Math.min(...valid.map((v) => v.k)); const winners = valid.filter((v) => v.k === minK);
+  const done = await hostFinish(roomId, winners.map((w) => w.c));
+  for (const v of valid) if (!winners.includes(v)) await rejectClaim(v.c.id, done ? 'Another player completed the pattern first' : 'The game has already finished');
+}
+async function hostFinish(roomId, winClaims) {
+  const players = await qlist(`bingoRooms/${roomId}/players`); const winIds = winClaims.map((c) => c.userId);
+  return runTransaction(db, async (tx) => {
+    const roomRef = P('bingoRooms/' + roomId); const gRef = P('bingoGames/' + roomId); const rm = await tx.get(roomRef); const g = await tx.get(gRef);
+    if (!g.exists() || g.data().status !== 'active') return false; const room = rm.data();
+    const wallets = []; for (const id of winIds) wallets.push(await txWallet(tx, id));
+    const n = players.length; const total = r2(room.entryFee * n); const pool = prizeOf(room, n); const per = Math.floor((pool / winIds.length) * 100) / 100; const house = r2(total - per * winIds.length);
+    wallets.forEach((wr) => txApply(tx, wr, per, 'won', { type: 'win', ref: roomId, desc: 'Prize: ' + room.roomName }));
+    for (const p of players) {
+      const won = winIds.includes(p.id);
+      tx.update(P(`participations/${roomId}_${p.id}`), { status: 'completed', result: won ? 'Won' : 'Lost', coins: won ? r2(per - room.entryFee) : -room.entryFee });
+      tx.set(P('notifications/' + newId('notifications')), notifyDoc(p.id, won ? '🏆 You won!' : 'Game over', won ? `You won ${per} coins in ${room.roomName}.` : `${room.roomName} has finished. Better luck next time!`, 'game'));
+    }
+    winClaims.forEach((c) => tx.update(P('claims/' + c.id), { status: 'approved', reason: '', reviewedAt: serverTimestamp() }));
+    tx.update(gRef, { status: 'completed', winners: winClaims.map((c) => ({ uid: c.userId, username: c.username })), prizePerWinner: per, houseFee: house, totalCollected: total, completedAt: serverTimestamp(), nextDrawAt: 0 });
+    tx.update(roomRef, { status: 'completed', prizePool: pool, completedAt: serverTimestamp() });
+    return true;
+  });
+}
+
+// ====================================================================
+// ADMIN VIEWS
+// ====================================================================
+ADMIN_VIEWS.game = (main) => PLAYER_VIEWS.game(main);
+const adminBack = () => h('button', { class: 'btn', style: 'margin-bottom:10px', onclick: () => go('bingo') }, '← Back');
+
+function roomControls(id, r) {
+  const b = (label, cls, fn) => { const x = h('button', { class: 'btn sm ' + cls }, label); x.onclick = () => guarded(x, fn); return x; };
+  const out = [];
+  if (r.status === 'waiting') out.push(b('▶ Start', 'primary', async () => { if (!(await hostStartGame(id))) throw new Error('Could not start'); toast('Game started', 'ok'); }));
+  if (r.status === 'active') out.push(b('⏸ Pause', '', () => hostSetPaused(id, true)));
+  if (r.status === 'paused') out.push(b('▶ Resume', 'primary', () => hostSetPaused(id, false)));
+  if (['waiting', 'active', 'paused'].includes(r.status)) out.push(b('⛔ End & refund', 'danger', async () => { await new Promise((ok, no) => confirmBox('End this game?', 'All entry fees are refunded to the players.', 'End & refund', async () => { await hostCancel(id, 'closed', 'Ended by the administrator'); ok(); }, true)); }));
+  out.push(h('button', { class: 'btn sm', onclick: () => go('game', { roomId: id }) }, '👁 Watch'));
+  return h('div', { class: 'row' }, out);
+}
+ADMIN_VIEWS.overview = async (main) => {
+  const kp = h('div', { class: 'grid g4' }); const live = h('div', { class: 'grid g2', style: 'margin-top:14px' });
+  const [users, deps] = await Promise.all([qlist('users', where('role', '==', 'player')), qlist('depositRequests', where('status', '==', 'approved'))]);
+  let rooms = [];
+  const draw = () => {
+    const act = rooms.filter((r) => ['active', 'paused'].includes(r.status)), wait = rooms.filter((r) => r.status === 'waiting');
+    kp.replaceChildren(kpi('Players', fmt(users.length), 'registered', '👥'), kpi('Pending deposits', fmt(S.pendingDeposits), 'need review', '💳'), kpi('Live games', fmt(act.length), `${wait.length} waiting`, '🎱'), kpi('Coins deposited', coins(deps.reduce((a, d) => a + d.amount, 0)), 'approved total', '🪙'));
+    const list = [...act, ...wait];
+    live.replaceChildren(...(list.length ? list.map((r) => h('div', { class: 'card room ' + r.status }, h('div', { class: 'row sb' }, h('b', {}, r.roomName), statusPill(r.status)), h('div', { class: 'muted small' }, `${r.currentPlayers}/${r.maxPlayers} players · ${coins(r.entryFee)} · prize ${coins(r.prizePool)}`), roomControls(r.id, r))) : [h('div', { class: 'card empty', style: 'grid-column:1/-1' }, 'No live or waiting games. Create one in the Bingo tab.')]));
+  };
+  main.replaceChildren(h('h2', {}, 'Overview'), h('div', { class: 'card', style: 'margin-bottom:14px' }, h('b', {}, '⚙️ Host engine: '), 'this browser tab runs the draws, claim checks and payouts. Keep it open while games are running.'), kp, h('h2', { style: 'margin-top:18px' }, 'Live & waiting games'), live);
+  sub(listen(C('bingoRooms'), (s) => { rooms = s.docs.map((d) => ({ id: d.id, ...d.data() })); draw(); }));
+};
+
+ADMIN_VIEWS.players = async (main) => {
+  const [users, wallets] = await Promise.all([qlist('users'), qlist('wallets')]); const wm = {}; wallets.forEach((w) => { wm[w.id] = w; });
+  const q = h('input', { placeholder: 'Search username…', style: 'max-width:280px' }); const box = h('div', { class: 'card' });
+  const draw = () => {
+    const t = q.value.trim().toLowerCase(); const list = users.filter((u) => !t || (u.username || '').toLowerCase().includes(t)).sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt));
+    box.replaceChildren(h('div', { class: 'table-wrap' }, h('table', {}, h('thead', {}, h('tr', {}, ['User', 'Role', 'Status', 'Balance', 'Joined', ''].map((x, i) => h('th', { class: i === 3 ? 'num' : '' }, x)))),
+      h('tbody', {}, list.map((u) => h('tr', {}, h('td', {}, h('b', {}, u.username)), h('td', {}, u.role), h('td', {}, h('span', { class: 'pill ' + (u.status === 'active' ? 'good' : 'bad') }, u.status)), h('td', { class: 'num' }, fmt((wm[u.id] || {}).balance)), h('td', { class: 'nowrap' }, fmtDT(u.createdAt)),
+        h('td', {}, h('div', { class: 'row' }, h('button', { class: 'btn sm', onclick: () => userDetail(u, wm[u.id]) }, 'Details'), u.id !== S.user.id ? h('button', { class: 'btn sm ' + (u.status === 'active' ? 'danger' : ''), onclick: () => confirmBox(u.status === 'active' ? 'Suspend player?' : 'Activate player?', u.username, 'Confirm', async () => { const st = u.status === 'active' ? 'suspended' : 'active'; await updateDoc(P('users/' + u.id), { status: st }); u.status = st; await audit(st === 'active' ? 'activate_user' : 'suspend_user', u.username); draw(); }, u.status === 'active') }, u.status === 'active' ? 'Suspend' : 'Activate') : null))))))));
+  };
+  q.addEventListener('input', draw); draw(); main.replaceChildren(h('h2', {}, 'Players'), h('div', { style: 'margin-bottom:12px' }, q), box);
+  function userDetail(u, w) {
+    const amt = h('input', { type: 'number', step: 1, placeholder: '+50 or -20' }); const why = h('input', { placeholder: 'Reason (required)', maxlength: 200 }); const hist = h('div', {}, spinner());
+    const btn = h('button', { class: 'btn gold block', style: 'margin-top:10px' }, 'Apply adjustment');
+    btn.onclick = () => guarded(btn, async () => { const a = num(amt.value); const r = clean(why.value, 200); if (!Number.isFinite(a) || a === 0) throw new Error('Enter an amount'); if (r.length < 3) throw new Error('A reason is required');
+      await runTransaction(db, async (tx) => { const wr = await txWallet(tx, u.id); txApply(tx, wr, a, 'adjust', { type: 'adjustment', ref: '', desc: 'Admin adjustment: ' + r }); }); await audit('adjust_balance', `${u.username} ${a}: ${r}`); await notify(u.id, 'Balance adjusted', `${a > 0 ? '+' : ''}${a} coins. ${r}`, 'wallet'); toast('Balance updated', 'ok'); close(); go('players'); });
+    const close = modal('Player: ' + u.username, h('div', {}, h('p', {}, 'Balance: ', h('b', {}, coins((w || {}).balance))), field('Adjust coins', amt), field('Reason', why), btn, h('h3', {}, 'Recent transactions'), hist), { wide: true });
+    qlist('transactions', where('userId', '==', u.id)).then((t) => { t.sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt)); hist.replaceChildren(t.length ? h('div', { class: 'table-wrap' }, h('table', {}, h('tbody', {}, t.slice(0, 15).map((x) => h('tr', {}, h('td', { class: 'nowrap' }, fmtDT(x.createdAt)), h('td', { class: 'small' }, x.description), h('td', { class: 'num ' + (x.amount >= 0 ? 'pos' : 'neg') }, fmt(x.amount))))))) : h('p', { class: 'muted' }, 'None.')); });
+  }
+};
+
+async function approveDeposit(d) {
+  await runTransaction(db, async (tx) => {
+    const ref = P('depositRequests/' + d.id); const s = await tx.get(ref); if (!s.exists() || s.data().status !== 'pending') throw new Error('This request was already reviewed');
+    const amt = s.data().amount; const wr = await txWallet(tx, d.userId);
+    txApply(tx, wr, amt, 'deposit', { type: 'deposit', ref: d.id, desc: 'Deposit approved' });
+    tx.update(ref, { status: 'approved', reviewedAt: serverTimestamp(), reviewedBy: S.user.id });
+    tx.set(P('notifications/' + newId('notifications')), notifyDoc(d.userId, '✅ Deposit approved', `${amt} coins were added to your wallet.`, 'wallet'));
+  });
+  await audit('approve_deposit', `${d.username} ${d.amount}`);
+}
+async function rejectDeposit(d, reason) {
+  await runTransaction(db, async (tx) => {
+    const ref = P('depositRequests/' + d.id); const s = await tx.get(ref); if (!s.exists() || s.data().status !== 'pending') throw new Error('This request was already reviewed');
+    tx.update(ref, { status: 'rejected', rejectionReason: reason, reviewedAt: serverTimestamp(), reviewedBy: S.user.id });
+    tx.set(P('notifications/' + newId('notifications')), notifyDoc(d.userId, '❌ Deposit rejected', reason, 'wallet'));
+  });
+  await audit('reject_deposit', `${d.username} ${d.amount}: ${reason}`);
+}
+ADMIN_VIEWS.deposits = async (main) => {
+  let filter = S.depFilter || 'pending'; const box = h('div', {}); let all = [];
+  const tab = (id, l) => h('button', { class: filter === id ? 'on' : '', onclick: () => { filter = S.depFilter = id; draw(); paintTabs(); } }, l); const tabs = h('div', { class: 'seg', style: 'max-width:420px;margin-bottom:12px' });
+  const paintTabs = () => tabs.replaceChildren(tab('pending', 'Pending'), tab('approved', 'Approved'), tab('rejected', 'Rejected'));
+  const view = async (d) => { const close = modal('Deposit evidence', h('div', {}, spinner()), { wide: true }); try { const ev = d.hasEvidence ? await getData('depositEvidence/' + d.id) : null; document.querySelector('.modal:last-of-type').replaceChildren(h('h2', {}, `${d.username}: ${fmt(d.amount)} coins`), ev ? h('img', { class: 'evidence', src: ev.img }) : h('p', { class: 'muted' }, 'No photo attached.'), h('p', {}, 'Reference: ', d.transactionReference || '—'), h('p', {}, 'Notes: ', d.notes || '—'), h('button', { class: 'btn block', onclick: () => document.querySelector('.modal-bg:last-of-type').remove() }, 'Close')); } catch (e) { close(); fail(e); } };
+  const draw = () => {
+    const list = all.filter((d) => d.status === filter).sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt));
+    box.replaceChildren(list.length ? h('div', { class: 'grid g2' }, list.map((d) => h('div', { class: 'card' }, h('div', { class: 'row sb' }, h('b', {}, d.username), statusPill(d.status)), h('div', { style: 'font:700 1.6rem var(--display)' }, coins(d.amount)), h('div', { class: 'muted small' }, fmtDT(d.createdAt) + (d.transactionReference ? ' · ref ' + d.transactionReference : '')), d.rejectionReason ? h('div', { class: 'neg small' }, d.rejectionReason) : null,
+      h('div', { class: 'row', style: 'margin-top:10px' }, h('button', { class: 'btn sm', onclick: () => view(d) }, '🖼 Evidence'), d.status === 'pending' ? [h('button', { class: 'btn sm primary', onclick: (e) => guarded(e.target, async () => { await approveDeposit(d); toast('Deposit approved', 'ok'); }) }, 'Approve'), h('button', { class: 'btn sm danger', onclick: () => reasonBox('Reject deposit', 'Why?', 'Reject', async (r) => { await rejectDeposit(d, r); toast('Rejected', 'ok'); }) }, 'Reject')] : null)))) : h('div', { class: 'card empty' }, 'Nothing here.'));
+  };
+  paintTabs(); main.replaceChildren(h('h2', {}, 'Deposit requests'), tabs, box);
+  sub(listen(C('depositRequests'), (s) => { all = s.docs.map((d) => ({ id: d.id, ...d.data() })); draw(); }));
+};
+
+ADMIN_VIEWS.bingo = async (main) => {
+  const st = (await getDoc(P('settings/main'))).data() || {};
+  const f = { name: h('input', { placeholder: 'e.g. Lucky Room', maxlength: 40 }), max: h('input', { type: 'number', min: 2, max: 20, value: 10 }), min: h('input', { type: 'number', min: 2, max: 20, value: 2 }), fee: h('input', { type: 'number', min: 1, value: 10 }),
+    pat: select(Object.entries(PATTERNS), 'horizontal'), iv: h('input', { type: 'number', min: 2, max: 60, value: st.defaultDrawInterval || 5 }), pct: h('input', { type: 'number', min: 0, max: 50, value: st.houseFeePct == null ? 10 : st.houseFeePct }) };
+  const create = h('button', { class: 'btn primary block', style: 'margin-top:12px' }, 'Create room');
+  create.onclick = () => guarded(create, async () => {
+    const name = clean(f.name.value, 40), mx = num(f.max.value), mn = num(f.min.value), fee = num(f.fee.value), iv = num(f.iv.value), pct = num(f.pct.value);
+    if (!name) throw new Error('Give the room a name'); if (!Number.isInteger(mx) || mx < 2 || mx > 20) throw new Error('Max players must be 2-20'); if (!Number.isInteger(mn) || mn < 2 || mn > mx) throw new Error('Min players must be 2 or more and not above max');
+    if (!(fee > 0)) throw new Error('Entry fee must be above 0'); if (!(iv >= 2 && iv <= 60)) throw new Error('Draw interval 2-60 seconds'); if (!(pct >= 0 && pct <= 50)) throw new Error('House fee 0-50%');
+    const id = newId('bingoRooms');
+    await setDoc(P('bingoRooms/' + id), { roomName: name, maxPlayers: mx, minPlayers: mn, entryFee: fee, winningPattern: f.pat.value, drawInterval: iv, houseFeePct: pct, currentPlayers: 0, prizePool: 0, status: 'waiting', autoStart: true, needsRefund: false, createdAt: serverTimestamp(), createdBy: S.user.id });
+    await setDoc(P('bingoGames/' + id), { roomName: name, status: 'waiting', drawnNumbers: [], drawCount: 0, lastNumber: 0, winners: [], prizePerWinner: 0, houseFee: 0, totalCollected: 0, nextDrawAt: 0, createdAt: serverTimestamp() });
+    await audit('create_room', `${name} fee ${fee}`); toast('Room created', 'ok'); f.name.value = '';
+  });
+  const box = h('div', { class: 'grid g2' });
+  const draw = (rooms) => {
+    const order = { waiting: 0, active: 1, paused: 1, completed: 2, closed: 3 };
+    const list = rooms.sort((a, b) => (order[a.status] - order[b.status]) || (tsMs(b.createdAt) - tsMs(a.createdAt))).slice(0, 40);
+    box.replaceChildren(...(list.length ? list.map((r) => { const iv = select([3, 5, 8, 10, 15, 20, 30], r.drawInterval, { style: 'width:auto;padding:4px 8px' }); iv.onchange = () => updateDoc(P('bingoRooms/' + r.id), { drawInterval: Number(iv.value) }).then(() => toast('Draw speed updated', 'ok')).catch(fail);
+      return h('div', { class: 'card room ' + r.status }, h('div', { class: 'row sb' }, h('b', {}, r.roomName), statusPill(r.status)), h('div', { class: 'muted small' }, `${r.currentPlayers}/${r.maxPlayers} players (min ${r.minPlayers || 2}) · ${coins(r.entryFee)} · fee ${r.houseFeePct || 0}% · prize ${coins(r.prizePool)}`), h('div', { class: 'small' }, '🎯 ' + PATTERNS[r.winningPattern]),
+        ['waiting', 'active', 'paused'].includes(r.status) ? h('div', { class: 'row small' }, 'Draw every ', iv, 's') : null, r.closeReason ? h('div', { class: 'muted small' }, r.closeReason) : null, roomControls(r.id, r)); }) : [h('div', { class: 'card empty', style: 'grid-column:1/-1' }, 'No rooms yet.')]));
+  };
+  main.replaceChildren(h('h2', {}, 'Bingo rooms'), h('div', { class: 'card', style: 'margin-bottom:14px' }, h('h3', { style: 'margin-top:0' }, 'Create a room'), h('div', { class: 'grid g3' }, field('Room name', f.name), field('Max players (2-20)', f.max), field('Min players to start', f.min), field('Entry fee (coins)', f.fee), field('Winning pattern', f.pat), field('Draw interval (s)', f.iv), field('House fee %', f.pct)), create), box);
+  sub(listen(C('bingoRooms'), (s) => draw(s.docs.map((d) => ({ id: d.id, ...d.data() })))));
+};
+
+ADMIN_VIEWS.finance = async (main) => {
+  const [games, deps, wds] = await Promise.all([qlist('bingoGames'), qlist('depositRequests'), qlist('withdrawalRequests')]);
+  const done = games.filter((g) => g.status === 'completed' && (g.winners || []).length).sort((a, b) => tsMs(b.completedAt) - tsMs(a.completedAt));
+  const sum = (a, k) => r2(a.reduce((x, y) => x + Number(y[k] || 0), 0)); const approved = deps.filter((d) => d.status === 'approved');
+  const rows = done.map((g) => [fmtDT(g.completedAt), g.roomName, g.totalCollected, r2(g.prizePerWinner * g.winners.length), g.houseFee, g.winners.map((w) => w.username).join(' + ')]);
+  const wBox = h('div', {}); const wPend = wds.filter((w) => w.status === 'pending');
+  wBox.append(wPend.length ? h('table', {}, h('tbody', {}, wPend.map((w) => h('tr', {}, h('td', {}, w.username), h('td', { class: 'num' }, fmt(w.amount)), h('td', {}, h('button', { class: 'btn sm primary', onclick: (e) => guarded(e.target, async () => {
+    await runTransaction(db, async (tx) => { const ref = P('withdrawalRequests/' + w.id); const s = await tx.get(ref); if (s.data().status !== 'pending') throw new Error('Already reviewed'); const wr = await txWallet(tx, w.userId); txApply(tx, wr, -w.amount, 'withdrawal', { type: 'withdrawal', ref: w.id, desc: 'Withdrawal (simulation)' }); tx.update(ref, { status: 'approved', reviewedAt: serverTimestamp(), reviewedBy: S.user.id }); });
+    await audit('approve_withdrawal', `${w.username} ${w.amount}`); toast('Approved', 'ok'); go('finance'); }) }, 'Approve'), ' ', h('button', { class: 'btn sm danger', onclick: () => reasonBox('Reject withdrawal', 'Why?', 'Reject', async (r) => { await updateDoc(P('withdrawalRequests/' + w.id), { status: 'rejected', rejectionReason: r, reviewedAt: serverTimestamp(), reviewedBy: S.user.id }); await audit('reject_withdrawal', w.username); go('finance'); }) }, 'Reject')))))) : h('p', { class: 'muted' }, 'No pending withdrawal requests.'));
+  const exp = h('button', { class: 'btn', onclick: () => downloadText('bingo-finance.csv', ['Date,Room,Collected,Prizes,House,Winners', ...rows.map((r) => r.map((x) => `"${String(x).replace(/"/g, '""')}"`).join(','))].join('\n'), 'text/csv') }, '⬇ Export CSV');
+  main.replaceChildren(h('div', { class: 'row sb' }, h('h2', {}, 'Finance'), exp),
+    h('div', { class: 'grid g4' }, kpi('Deposits approved', coins(sum(approved, 'amount')), `${approved.length} requests`, '💳'), kpi('Entry fees collected', coins(sum(done, 'totalCollected')), `${done.length} finished games`, '🎟️'), kpi('Prizes paid', coins(rows.reduce((a, r) => a + r[3], 0)), '', '🏆'), kpi('House revenue', coins(sum(done, 'houseFee')), '', '🏦')),
+    h('div', { class: 'card', style: 'margin-top:14px' }, h('h3', { style: 'margin-top:0' }, 'Finished games'), rows.length ? h('div', { class: 'table-wrap' }, h('table', {}, h('thead', {}, h('tr', {}, ['Date', 'Room', 'Collected', 'Prizes', 'House', 'Winner(s)'].map((x, i) => h('th', { class: i > 1 && i < 5 ? 'num' : '' }, x)))), h('tbody', {}, rows.slice(0, 60).map((r) => h('tr', {}, r.map((x, i) => h('td', { class: i > 1 && i < 5 ? 'num' : '' }, i > 1 && i < 5 ? fmt(x) : String(x)))))))) : h('p', { class: 'muted' }, 'No finished games yet.')),
+    h('div', { class: 'card', style: 'margin-top:14px' }, h('h3', { style: 'margin-top:0' }, 'Withdrawal requests (simulation)'), wBox));
+};
+
+ADMIN_VIEWS.settings = async (main) => {
+  const st = (await getDoc(P('settings/main'))).data() || {};
+  const pct = h('input', { type: 'number', min: 0, max: 50, value: st.houseFeePct == null ? 10 : st.houseFeePct }); const iv = h('input', { type: 'number', min: 2, max: 60, value: st.defaultDrawInterval || 5 });
+  const wd = h('input', { type: 'checkbox', checked: !!st.withdrawalsEnabled, style: 'width:auto' });
+  const save = h('button', { class: 'btn primary', style: 'margin-top:12px' }, 'Save settings');
+  save.onclick = () => guarded(save, async () => { const p = num(pct.value), i = num(iv.value); if (!(p >= 0 && p <= 50)) throw new Error('House fee 0-50'); if (!(i >= 2 && i <= 60)) throw new Error('Interval 2-60');
+    await setDoc(P('settings/main'), { houseFeePct: p, defaultDrawInterval: i, withdrawalsEnabled: wd.checked, currency: 'coins' }, { merge: true }); await audit('update_settings', `fee ${p}% interval ${i}s withdrawals ${wd.checked}`); toast('Saved', 'ok'); });
+  const un = h('input', { placeholder: 'username to promote to admin' }); const pb = h('button', { class: 'btn', style: 'margin-top:10px' }, 'Make admin');
+  pb.onclick = () => guarded(pb, async () => { const u = (await qlist('users', where('username', '==', clean(un.value, 20).toLowerCase())))[0]; if (!u) throw new Error('No such user'); await updateDoc(P('users/' + u.id), { role: 'admin' }); await audit('promote_admin', u.username); toast(u.username + ' is now an admin', 'ok'); un.value = ''; });
+  main.replaceChildren(h('h2', {}, 'Settings'), h('div', { class: 'grid g2' }, h('div', { class: 'card' }, field('Default house fee %', pct), field('Default draw interval (s)', iv), h('label', { class: 'row', style: 'margin-top:10px' }, wd, 'Enable withdrawal requests (simulation only, no real payouts)'), save),
+    h('div', { class: 'card' }, h('h3', { style: 'margin-top:0' }, 'Add another administrator'), h('p', { class: 'muted small' }, 'The player must have registered first. Admins can move coins and run games.'), field('Username', un), pb)));
+};
+ADMIN_VIEWS.audit = async (main) => {
+  const logs = (await qlist('auditLogs')).sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt)).slice(0, 200);
+  main.replaceChildren(h('h2', {}, 'Audit log'), h('div', { class: 'card' }, logs.length ? h('div', { class: 'table-wrap' }, h('table', {}, h('thead', {}, h('tr', {}, ['When', 'Admin', 'Action', 'Detail'].map((x) => h('th', {}, x)))), h('tbody', {}, logs.map((l) => h('tr', {}, h('td', { class: 'nowrap' }, fmtDT(l.createdAt)), h('td', {}, l.adminName), h('td', {}, h('span', { class: 'pill' }, l.action)), h('td', { class: 'small' }, l.detail)))))) : h('p', { class: 'muted' }, 'Nothing logged yet.')));
+};
+
+// ---- boot ----
+renderAuth();
+
+</script>
+</body>
+</html>
